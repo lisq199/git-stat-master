@@ -19,7 +19,7 @@ import io.ologn.gitstat.utils.MyUtils;
  */
 public class ColorPixels implements VelocityHtmlGenerator {
 	
-	public static final String TEMPLATE_NAME = MyUtils.HTML_DIR
+	public static final String TEMPLATE_PATH = MyUtils.HTML_DIR
 			+ "ColorPixels.html";
 	
 	public static final int PIXEL_WITDH = 5;
@@ -96,8 +96,8 @@ public class ColorPixels implements VelocityHtmlGenerator {
 	}
 	
 	@Override
-	public String getTemplateName() {
-		return TEMPLATE_NAME;
+	public String getTemplatePath() {
+		return TEMPLATE_PATH;
 	}
 
 	@Override

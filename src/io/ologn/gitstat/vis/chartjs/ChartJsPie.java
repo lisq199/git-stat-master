@@ -17,7 +17,7 @@ public class ChartJsPie implements VelocityHtmlGenerator {
 			DEF_COLOR_3 = "#FDB45C",
 			DEF_HIGHLIGHT_3 = "#FFC870";
 	
-	public static final String TEMPLATE_NAME = MyUtils.HTML_DIR
+	public static final String TEMPLATE_PATH = MyUtils.HTML_DIR
 			+ "ChartJsPie.html";
 	
 	public static final String REPLACE_DATA = "data";
@@ -29,8 +29,8 @@ public class ChartJsPie implements VelocityHtmlGenerator {
 	}
 	
 	@Override
-	public String getTemplateName() {
-		return TEMPLATE_NAME;
+	public String getTemplatePath() {
+		return TEMPLATE_PATH;
 	}
 
 	@Override

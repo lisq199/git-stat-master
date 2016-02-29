@@ -15,10 +15,11 @@ import org.apache.velocity.app.VelocityEngine;
 public interface VelocityHtmlGenerator {
 	
 	/**
-	 * Get the file name of the template
+	 * Get the path of the template relative to the current working 
+	 * directory
 	 * @return
 	 */
-	public String getTemplateName();
+	public String getTemplatePath();
 	
 	/**
 	 * @return a Map where the keys are all the strings that needs to be 
@@ -31,20 +32,20 @@ public interface VelocityHtmlGenerator {
 	 * @return
 	 */
 	public default String createHtmlString() {
-		return replace(getTemplateName(), getReplaceMap());
+		return replace(getTemplatePath(), getReplaceMap());
 	}
 	
 	/**
 	 * Intended for internal use, but it's probably reusable.
-	 * @param templateName
+	 * @param templatePath
 	 * @param replaceMap
 	 * @return
 	 */
-	public static String replace(String templateName,
+	public static String replace(String templatePath,
 			Map<String, String> replaceMap) {
 		VelocityEngine ve = new VelocityEngine();
 		ve.init();
-		Template t = ve.getTemplate(templateName);
+		Template t = ve.getTemplate(templatePath);
 		VelocityContext context = new VelocityContext();
 		replaceMap.forEach((s1, s2) -> context.put(s1, s2));
 		StringWriter writer = new StringWriter();
