@@ -11,7 +11,6 @@ import org.apache.commons.lang3.SystemUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
-import io.ologn.common.os.OlognOs;
 import io.ologn.gitstat.tokenizer.BetterParserC;
 import io.ologn.gitstat.tokenizer.TokenParser;
 import io.ologn.gitstat.vis.VisRunner;
@@ -20,8 +19,8 @@ public class ConfigRunner {
 	
 	protected static final String DEFAULT_CONFIG_NAME = "config.gsmconfig";
 	
-	protected static final String DEFAULT_CONFIG_PATH =
-			OlognOs.getUserDesktop() + File.separator + DEFAULT_CONFIG_NAME;
+	protected static final String DEFAULT_CONFIG_PATH = DEFAULT_CONFIG_NAME;
+			//OlognOs.getUserDesktop() + File.separator + DEFAULT_CONFIG_NAME;
 	
 	/**
 	 * Print out an error message and exit
@@ -41,7 +40,8 @@ public class ConfigRunner {
 	static Path getConfigPath(Scanner scanner) {
 		System.out.println("Please enter the path to your config file: "
 				+ "(If no path is entered, "
-				+ "Desktop/" + DEFAULT_CONFIG_NAME + " will be used.)");
+				+ DEFAULT_CONFIG_NAME + " in your "
+				+ "current working directory will be used.)");
 		String configPath = scanner.nextLine();
 		if (configPath.isEmpty()) {
 			configPath = DEFAULT_CONFIG_PATH;

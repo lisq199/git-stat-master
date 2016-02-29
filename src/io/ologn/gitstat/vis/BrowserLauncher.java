@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 
-import io.ologn.common.os.OlognOs;
 import io.ologn.gitstat.utils.MyUtils;
 
 /**
@@ -35,7 +34,8 @@ public class BrowserLauncher {
 	}
 	
 	/**
-	 * Dump the html text into an html file on the desktop and launch it 
+	 * Dump the html text into an html file in the current working 
+	 * directory and launch it 
 	 * from there. The name of the html file will be the full class 
 	 * name of this class. If the file already exists, it will be 
 	 * overwritten.
@@ -43,8 +43,7 @@ public class BrowserLauncher {
 	 * @throws IOException
 	 */
 	public static void launchWithHtmlText(String htmlText) throws IOException {
-		File html = new File(OlognOs.getUserDesktop() + File.separator
-				+ HTML_NAME);
+		File html = new File(HTML_NAME);
 		if (html.exists()) {
 			html.delete();
 		}
