@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
+	<style>
+		.chart-legend li span{
+			display: inline-block;
+			width: 12px;
+			height: 12px;
+			margin-right: 5px;
+		}
+	</style>
+</head>
+<body>
+	<canvas id='chart' width=640 height=480></canvas>
+	<div id='js-legend' class='chart-legend'></div>
+	
+	<script>
+		var ctx = document.getElementById('chart').getContext('2d');
+		
+		var data = $data; /*[
+			{
+				value: 300,
+				color: '#F7464A',
+				highlight: '#FF5A5E',
+				label: 'Red'
+			},
+			{
+				value: 50,
+				color: '#46BFBD',
+				highlight: '#5AD3D1',
+				label: 'Green'
+			},
+			{
+				value: 100,
+				color: '#FDB45C',
+				highlight: '#FFC870',
+				label: 'Yellow'
+			}
+		]*/
+		
+		var options = {
+			tooltipTemplate: '<%if (label){%><%=label%>: <%}%><%= value %>%',
+		}
+		
+		var myPieChart = new Chart(ctx).Pie(data, options);
+		document.getElementById('js-legend').innerHTML = myPieChart.generateLegend();
+		
+	</script>
+	
+</body>
+</html>

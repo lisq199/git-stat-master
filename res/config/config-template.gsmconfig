@@ -1,0 +1,74 @@
+{
+
+	// (String) 
+	// Path to the .git file relative to your home directory
+	"repoPath": "Developer/GitHub/git-test/.git",
+
+	// (Integer) 
+	// Choose the type of visualization. 
+	// Type 1: Pie chart showing how much everyone owns a file at 
+	// a specified commit.
+	// Type 2: Color pixels showing the age of each line of code 
+	// over commits.
+	"visType": 2,
+
+	// (String)
+	// Needed in: Type 1, Type 2. 
+	// The path to the file to be analyzed relative to the repo
+	"filePath": "abspath.c",
+
+	// (String) 
+	// Needed in: Type 1. 
+	// The revision string corresponding to the commit to be 
+	// analyzed.
+	"revisionString": "HEAD",
+
+	// (String) 
+	// Needed in: Type 1. 
+	// The tokenizer used
+	"tokenizer": "BetterParserC",
+
+	// (Boolean) 
+	// Needed in: Type 1. 
+	// Whether small values in the pie chart are combined
+	"combineSmallValues": true,
+
+	// (Double) 
+	// Needed in: Type 1. 
+	// The upper bound of the percentage of "other". 
+	// If combineSmallValues is set to false, this value will 
+	// be ignored.
+	"percentageForOther": 3.0,
+
+	// (Boolean) 
+	// Needed in: Type 2. 
+	// Whether the visualization of the age of each line is sorted 
+	// by the age of the lines.
+	"sortByAge": false,
+
+	// (Boolean) 
+	// Needed in: Type 2. 
+	// If the visualization of the age of each line is sorted by 
+	// the age of the lines, whether they will be sorted in 
+	// ascending order.
+	"sortByAgeAscending": false,
+
+	// (Integer) 
+	// Needed in: Type 2. 
+	// The height of each color block
+	"pixelHeight": 1,
+
+	// (Integer)
+	// Needed in: Type 2. 
+	// The width of each color block
+	"pixelWidth": 10,
+
+	// (Boolean)
+	// Needed in: Type 2. 
+	// If set to true, the color blocks will be layed out 
+	// vertically, meaning each column will represent a commit. 
+	// Otherwise, the order will be horizontal, and a commit will 
+	// be represented by rows.
+	"displayVertical": false
+
+}

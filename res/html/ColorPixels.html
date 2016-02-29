@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<style>
+		html, body {
+			margin: 0;
+			/*height: 100%;
+			width: 100%;*/
+		}
+	</style>
+</head>
+<body>
+	<svg id="graph" class="graph">
+$svgTags
+	</svg>
+	<script>
+		document.getElementById('graph').setAttribute("width", $totalWidth);
+		document.getElementById('graph').setAttribute("height", $totalHeight);
+	</script>
+</body>
+</html>
