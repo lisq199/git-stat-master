@@ -148,9 +148,5 @@ public class ConfigRunner {
 			break;
 		}
 	}
-	
-	public static void main(String[] args) throws Exception {
-		run(args);
-	}
 
 }
