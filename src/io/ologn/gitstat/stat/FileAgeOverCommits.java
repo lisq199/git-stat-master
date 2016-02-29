@@ -33,6 +33,10 @@ public class FileAgeOverCommits {
 		this.map = MiscJGitUtils.getMapSortedByAuthorTime(repo, ascending);
 	}
 	
+	/**
+	 * Get the number of commits
+	 * @return
+	 */
 	public int size() {
 		return map.size();
 	}
@@ -83,6 +87,14 @@ public class FileAgeOverCommits {
 		return newMap;
 	}
 	
+	/**
+	 * Calculate a FileAgeOverCommits object
+	 * @param repo
+	 * @param ages
+	 * @param filePath
+	 * @param ascending
+	 * @return
+	 */
 	public static FileAgeOverCommits calculate(Repository repo,
 			Iterable<FileAge> ages, String filePath, boolean ascending) {
 		FileAgeOverCommits faoc = new FileAgeOverCommits(repo, ascending);

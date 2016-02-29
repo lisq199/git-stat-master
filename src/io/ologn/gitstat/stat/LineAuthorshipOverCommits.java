@@ -12,6 +12,11 @@ import org.eclipse.jgit.lib.Repository;
 
 import io.ologn.gitstat.jgit.MiscJGitUtils;
 
+/**
+ * Objects representing the author of each line of code in a file 
+ * over commits.
+ * @author lisq199
+ */
 public class LineAuthorshipOverCommits {
 	
 	protected Map<String, LineAuthorship> map;
@@ -27,6 +32,10 @@ public class LineAuthorshipOverCommits {
 		this.map = MiscJGitUtils.getMapSortedByAuthorTime(repo, ascending);
 	}
 	
+	/**
+	 * Get the number of commits
+	 * @return
+	 */
 	public int size() {
 		return map.size();
 	}
@@ -35,6 +44,11 @@ public class LineAuthorshipOverCommits {
 		map.forEach(action);
 	}
 	
+	/**
+	 * Get the author ID of a GitAuthor
+	 * @param author
+	 * @return
+	 */
 	public int getAuthorId(GitAuthor author) {
 		if (authorIdMap.containsKey(author)) {
 			return authorIdMap.get(author);
@@ -81,6 +95,14 @@ public class LineAuthorshipOverCommits {
 		}
 	}
 	
+	/**
+	 * Calculate a LineAuthorshipOverCommits object
+	 * @param repo
+	 * @param authorships
+	 * @param filePath
+	 * @param ascending
+	 * @return
+	 */
 	public static LineAuthorshipOverCommits calculate(Repository repo,
 			Iterable<LineAuthorship> authorships, String filePath,
 			boolean ascending) {

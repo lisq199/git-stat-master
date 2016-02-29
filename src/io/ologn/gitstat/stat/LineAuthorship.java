@@ -21,6 +21,10 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import io.ologn.common.collect.OlognMaps;
 import io.ologn.gitstat.jgit.BlameUtils;
 
+/**
+ * Object storing the author of each line in a file at a commit.
+ * @author lisq199
+ */
 public class LineAuthorship implements BlameResultContainer {
 	
 	protected GitAuthor[] authors;
@@ -55,6 +59,11 @@ public class LineAuthorship implements BlameResultContainer {
 		return authors[i];
 	}
 	
+	/**
+	 * Get the number of lines written by an author
+	 * @param author
+	 * @return
+	 */
 	public int getNumberOfLinesWrittenBy(GitAuthor author) {
 		if (this.map.containsKey(author)) {
 			return this.map.get(author);
@@ -63,11 +72,15 @@ public class LineAuthorship implements BlameResultContainer {
 		}
 	}
 	
+	/**
+	 * Get all the authors of the file
+	 * @return
+	 */
 	public GitAuthor[] getAuthors() {
 		return authors.clone();
 	}
 	
-	public Comparator<GitAuthor> getGitAuthorComparatorByNumberOfLines(
+	protected Comparator<GitAuthor> getGitAuthorComparatorByNumberOfLines(
 			boolean ascending) {
 		return (a, b) -> {
 			int aLines = getNumberOfLinesWrittenBy(a);
@@ -80,24 +93,44 @@ public class LineAuthorship implements BlameResultContainer {
 		};
 	}
 	
+	/**
+	 * Get an array of GitAuthor sorted by the number of lines each 
+	 * author wrote in the file
+	 * @param ascending
+	 * @return
+	 */
 	public GitAuthor[] getAuthorsSortedByNumberOfLines(boolean ascending) {
 		GitAuthor[] sortedAuthors = getAuthors();
 		Arrays.sort(authors, getGitAuthorComparatorByNumberOfLines(ascending));
 		return sortedAuthors;
 	}
 	
+	/**
+	 * Get the author that wrote the most number of lines
+	 * @return
+	 */
 	public GitAuthor getAuthorWithMostLines() {
 		return Arrays.stream(getAuthors())
 				.max(getGitAuthorComparatorByNumberOfLines(true))
 				.get();
 	}
 	
+	/**
+	 * Get the author that wrote the least number of lines
+	 * @return
+	 */
 	public GitAuthor getAuthorWithLeastLines() {
 		return Arrays.stream(getAuthors())
 				.min(getGitAuthorComparatorByNumberOfLines(true))
 				.get();
 	}
 	
+	/**
+	 * Get the map of author and the number of lines sorted by the 
+	 * number of lines
+	 * @param ascending
+	 * @return
+	 */
 	public Map<GitAuthor, Integer> getMapSortedByNumberOfLines(
 			boolean ascending) {
 		return OlognMaps.sortByValue(map, ascending);
@@ -121,6 +154,12 @@ public class LineAuthorship implements BlameResultContainer {
 		}
 	}
 	
+	/**
+	 * Calculate a LineAuthorship object.
+	 * @param sha1
+	 * @param blameResult
+	 * @return
+	 */
 	public static LineAuthorship calculate(
 			String sha1, BlameResult blameResult) {
 		LineAuthorship authorship = new LineAuthorship(sha1, blameResult);
@@ -128,10 +167,23 @@ public class LineAuthorship implements BlameResultContainer {
 		return authorship;
 	}
 	
+	/**
+	 * Calculate a LineAuthorship object.
+	 * @param container
+	 * @return
+	 */
 	public static LineAuthorship calculate(BlameResultContainer container) {
 		return calculate(container.getSha1(), container.getBlameResult());
 	}
 	
+	/**
+	 * Calculate a LineAuthorship object.
+	 * @param git
+	 * @param commitId
+	 * @param filePath
+	 * @return
+	 * @throws GitAPIException
+	 */
 	public static LineAuthorship calculate(Git git, AnyObjectId commitId,
 			String filePath) throws GitAPIException {
 		BlameResult blameResult = BlameUtils.getBlameResult(git, commitId,
@@ -139,6 +191,19 @@ public class LineAuthorship implements BlameResultContainer {
 		return calculate(commitId.getName(), blameResult);
 	}
 	
+	/**
+	 * Calculate a LineAuthorship object.
+	 * @param git
+	 * @param repo
+	 * @param revstr
+	 * @param filePath
+	 * @return
+	 * @throws RevisionSyntaxException
+	 * @throws AmbiguousObjectException
+	 * @throws IncorrectObjectTypeException
+	 * @throws GitAPIException
+	 * @throws IOException
+	 */
 	public static LineAuthorship calculate(Git git, Repository repo,
 			String revstr, String filePath) throws RevisionSyntaxException,
 	AmbiguousObjectException, IncorrectObjectTypeException, GitAPIException,
@@ -148,6 +213,19 @@ public class LineAuthorship implements BlameResultContainer {
 		return calculate(repo.resolve(revstr).getName(), blameResult);
 	}
 	
+	/**
+	 * Calculate a LineAuthorship object.
+	 * @param git
+	 * @param repo
+	 * @param commit
+	 * @param filePath
+	 * @return
+	 * @throws RevisionSyntaxException
+	 * @throws AmbiguousObjectException
+	 * @throws IncorrectObjectTypeException
+	 * @throws GitAPIException
+	 * @throws IOException
+	 */
 	public static LineAuthorship calculate(Git git, Repository repo,
 			RevCommit commit, String filePath) throws RevisionSyntaxException,
 	AmbiguousObjectException, IncorrectObjectTypeException, GitAPIException,
@@ -157,6 +235,19 @@ public class LineAuthorship implements BlameResultContainer {
 		return calculate(commit.getName(), blameResult);
 	}
 	
+	/**
+	 * Calculate multiple LineAuthorship objects over commits.
+	 * @param git
+	 * @param repo
+	 * @param commits
+	 * @param filePath
+	 * @return
+	 * @throws RevisionSyntaxException
+	 * @throws AmbiguousObjectException
+	 * @throws IncorrectObjectTypeException
+	 * @throws GitAPIException
+	 * @throws IOException
+	 */
 	public static List<LineAuthorship> calculateMultiple(Git git,
 			Repository repo, Iterable<RevCommit> commits, String filePath)
 					throws RevisionSyntaxException, AmbiguousObjectException,
@@ -169,6 +260,12 @@ public class LineAuthorship implements BlameResultContainer {
 		return list;
 	}
 	
+	/**
+	 * Calculate multiple LineAuthorship objects from multiple 
+	 * BlameResultContainer objects.
+	 * @param containers
+	 * @return
+	 */
 	public static List<LineAuthorship> calculateMultiple(
 			Iterable<BlameResultContainer> containers) {
 		List<LineAuthorship> list = new ArrayList<LineAuthorship>();
