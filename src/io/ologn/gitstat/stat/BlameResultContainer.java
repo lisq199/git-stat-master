@@ -83,9 +83,5 @@ public interface BlameResultContainer {
 				.getTime();
 		return Duration.ofMillis(System.currentTimeMillis() - authorMillis);
 	}
-	
-	public default FileAge getFileAge() {
-		return FileAge.calculate(this);
-	}
 
 }
