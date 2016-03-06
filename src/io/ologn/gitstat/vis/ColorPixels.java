@@ -2,11 +2,11 @@ package io.ologn.gitstat.vis;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.ologn.common.color.ColorCategory;
 import io.ologn.common.math.LinearScale;
-import io.ologn.gitstat.utils.MyUtils;
 
 /**
  * For creating visualization with color pixels, where each block 
@@ -14,13 +14,13 @@ import io.ologn.gitstat.utils.MyUtils;
  * a data set. Ultimately it will generate an HTML string.<br>
  * Note: parseMap() must be called after all the attributes are set.<br>
  * Typical usage: {@code ColorPixels.init().setPixelHeight(2)
- * .setPixelWidth(3).parseMap(map, true).createHtmlString()}
+ * .setPixelWidth(3).parse(dataArrays, titleArrays, true).createHtmlString()}
  * @author lisq199
  */
 public class ColorPixels implements VelocityHtmlGenerator {
 	
-	public static final String TEMPLATE_PATH = MyUtils.HTML_DIR
-			+ "ColorPixels.html";
+	public static final String TEMPLATE_PATH =
+			VelocityHtmlGenerator.TEMPLATE_DIR + "ColorPixels.html";
 	
 	public static final int PIXEL_WITDH = 5;
 	public static final int PIXEL_HEIGHT = 5;
@@ -94,7 +94,7 @@ public class ColorPixels implements VelocityHtmlGenerator {
 		this.colorCategory = colorCategory;
 		return this;
 	}
-	
+
 	@Override
 	public String getTemplatePath() {
 		return TEMPLATE_PATH;
@@ -106,24 +106,23 @@ public class ColorPixels implements VelocityHtmlGenerator {
 	}
 	
 	/**
-	 * Parse a Map and get the data from it
+	 * Parse the data
 	 * @param map
 	 * @param vertical
 	 * @return
 	 */
-	public ColorPixels parseMap(Map<String, long[]> map, boolean vertical) {
-		String svgTags = getSvgTagsFromMap(map,
+	public ColorPixels parse(List<long[]> dataArrays,
+			List<String[]> titleArrays, boolean vertical) {
+		String svgTags = getSvgTagsFromDataAndTitle(dataArrays, titleArrays,
 				pixelWidth, pixelHeight, colorCategory, vertical);
 		this.replaceMap.put(REPLACE_SVG, svgTags);
-		// Calculate total width
-		int totalWidth = pixelWidth * map.size();
-		// Calculate total height
-		int maxLen = -1;
-		for (long[] arr : map.values()) {
-			if (arr.length > maxLen) {
-				maxLen = arr.length;
-			}
-		}
+		// calculate total width
+		int totalWidth = pixelWidth * dataArrays.size();
+		// calculate total Height
+		int maxLen = dataArrays.stream()
+				.map(a -> a.length)
+				.max(Integer::compare)
+				.get();
 		int totalHeight = pixelHeight * maxLen;
 		// Set the total width and height of the svg tag
 		this.replaceMap.put(REPLACE_TOTAL_WIDTH,
@@ -148,36 +147,34 @@ public class ColorPixels implements VelocityHtmlGenerator {
 	 * @param width
 	 * @param height
 	 * @param fill
+	 * @param title if the rect tag is not supposed to have a 
+	 * title, assign this parameter to an empty String or null.
 	 * @return
 	 */
-	public static String getRectTag(int x, int y, int width, int height,
-			String fill) {
-		return "<rect x=" + x + " y=" + y + " width=" + width + " height="
-				+ height + " fill='" + fill + "' />";
+	protected static String getRectTag(int x, int y, int width, int height,
+			String fill, String title) {
+		String result = "<rect x=" + x + " y=" + y + " width=" + width
+				+ " height=" + height + " fill='" + fill + "'";
+		if (title == null || title.isEmpty()) {
+			result += " />";
+		} else {
+			result += "><title>" + title + "</title></rect>";
+		}
+		return result;
 	}
 	
-	/**
-	 * For internal use only. 
-	 * Get SVG tags from a Map.
-	 * @param map
-	 * @param pixelWidth
-	 * @param pixelHeight
-	 * @param colorCategory
-	 * @param vertical
-	 * @return
-	 */
-	protected static String getSvgTagsFromMap(Map<String, long[]> map,
-			int pixelWidth, int pixelHeight, ColorCategory colorCategory,
-			boolean vertical) {
-		final String t = "\t";
-		final String tt = t + t;
+	protected static String getSvgTagsFromDataAndTitle(
+			List<long[]> dataArrays, List<String[]> titleArrays,
+			int pixelWidth, int pixelHeight,
+			ColorCategory colorCategory, boolean vertical) {
+		final String tt = "\t\t";
 		
-		long min = map.values().stream()
-				.map(v -> Arrays.stream(v).min().getAsLong())
+		long min = dataArrays.stream()
+				.map(a -> Arrays.stream(a).min().getAsLong())
 				.min(Long::compare)
 				.get();
-		long max = map.values().stream()
-				.map(v -> Arrays.stream(v).max().getAsLong())
+		long max = dataArrays.stream()
+				.map(a -> Arrays.stream(a).max().getAsLong())
 				.max(Long::compare)
 				.get();
 		
@@ -186,23 +183,41 @@ public class ColorPixels implements VelocityHtmlGenerator {
 		StringBuilder builder = new StringBuilder();
 		
 		int xOffset = 0;
-		for (long[] arr : map.values()) {
+		for (int i = 0; i < dataArrays.size(); i++) {
+			long[] dataArray = dataArrays.get(i);
+			String[] titleArray = new String[0];
+			if (i < titleArrays.size()) {
+				titleArray = titleArrays.get(i);
+			}
+			
 			int yOffset = 0;
-			for (long l : arr) {
-				String color = colorCategory.getColor(l, colorScale);
-				String rectTag = null;
+			for (int j = 0; j < dataArray.length; j++) {
+				String color = colorCategory.getColor(
+						dataArray[j], colorScale);
+				String title = "";
+				if (j < titleArray.length) {
+					title = titleArray[j];
+				}
+				String rectTag;
 				if (vertical) {
 					rectTag = getRectTag(xOffset, yOffset,
-							pixelWidth, pixelHeight, color);
+							pixelWidth, pixelHeight,
+							color, title);
 				} else {
 					rectTag = getRectTag(yOffset, xOffset,
-							pixelHeight, pixelWidth, color);
+							pixelHeight, pixelWidth,
+							color, title);
 				}
+				
 				builder.append(tt).append(rectTag).append("\n");
+				
 				yOffset += pixelHeight;
 			}
+			
 			xOffset += pixelWidth;
 		}
+		
+		
 		return builder.toString();
 	}
 	

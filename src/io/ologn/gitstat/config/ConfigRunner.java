@@ -17,10 +17,9 @@ import io.ologn.gitstat.vis.VisRunner;
 
 public class ConfigRunner {
 	
-	protected static final String DEFAULT_CONFIG_NAME = "config.gsmconfig";
+	protected static final String DEFAULT_CONFIG_NAME = "config.json";
 	
 	protected static final String DEFAULT_CONFIG_PATH = DEFAULT_CONFIG_NAME;
-			//OlognOs.getUserDesktop() + File.separator + DEFAULT_CONFIG_NAME;
 	
 	/**
 	 * Print out an error message and exit
@@ -45,12 +44,10 @@ public class ConfigRunner {
 		String configPath = scanner.nextLine();
 		if (configPath.isEmpty()) {
 			configPath = DEFAULT_CONFIG_PATH;
-		} else {
-			configPath = SystemUtils.USER_HOME + File.separator + configPath;
 		}
 		Path configFilePath = Paths.get(configPath);
 		if (!Files.exists(configFilePath)) {
-			err("Config file " + configPath + " does not exist.");
+			err("Config file " + configFilePath + " does not exist.");
 		}
 		return configFilePath;
 	}

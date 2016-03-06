@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.ologn.common.color.ColorCategory;
-import io.ologn.gitstat.utils.MyUtils;
 import io.ologn.gitstat.vis.VelocityHtmlGenerator;
 
 public class ChartJsPie implements VelocityHtmlGenerator {
@@ -17,8 +16,8 @@ public class ChartJsPie implements VelocityHtmlGenerator {
 			DEF_COLOR_3 = "#FDB45C",
 			DEF_HIGHLIGHT_3 = "#FFC870";
 	
-	public static final String TEMPLATE_PATH = MyUtils.HTML_DIR
-			+ "ChartJsPie.html";
+	public static final String TEMPLATE_PATH =
+			VelocityHtmlGenerator.TEMPLATE_DIR + "ChartJsPie.html";
 	
 	public static final String REPLACE_DATA = "data";
 	

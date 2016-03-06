@@ -4,8 +4,9 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.Charset;
 
-import io.ologn.gitstat.utils.MyUtils;
+import org.apache.commons.io.FileUtils;
 
 /**
  * Used for launching the default browser to browse a URI.<br>
@@ -47,7 +48,8 @@ public class BrowserLauncher {
 		if (html.exists()) {
 			html.delete();
 		}
-		MyUtils.writeToFile(html, htmlText, false);
+		FileUtils.writeStringToFile(html, htmlText,
+				Charset.defaultCharset(), false);
 		launchWithUri(html.toURI());
 	}
 

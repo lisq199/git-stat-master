@@ -86,11 +86,7 @@ public class GitAuthor {
 	
 	@Override
 	public String toString() {
-		String result = "GitAuthor[" + name + ", " + email;
-		if (authorTime != null) {
-			result += ", " + authorTime;
-		}
-		result += "]";
+		String result = "GitAuthor[" + name + ", " + email + "]";
 		return result;
 	}
 

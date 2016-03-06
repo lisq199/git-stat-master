@@ -13,9 +13,11 @@
 	// *** Mandatory. 
 	// Choose the type of visualization. 
 	// Type 1: Pie chart showing how much everyone owns a file at 
-	// a specified commit.
+	// a specified commit. 
 	// Type 2: Color pixels showing the age of each line of code 
-	// over commits.
+	// over commits. 
+	// Type 3: Color pixels showing the authorship of each line 
+	// of code over commits. 
 	"visType": 3,
 
 	// (String)
@@ -80,7 +82,7 @@
 	// If set to true, the color blocks will be layed out 
 	// vertically, meaning each column will represent a commit. 
 	// Otherwise, the order will be horizontal, and a commit will 
-	// be represented by rows.
+	// be represented by a row.
 	"displayVertical": false,
 
 }

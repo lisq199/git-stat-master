@@ -1,8 +1,9 @@
 package io.ologn.gitstat.stat;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -57,8 +58,8 @@ public class LineAuthorshipOverCommits {
 		}
 	}
 	
-	public Map<String, long[]> getColorPixelMap() {
-		Map<String, long[]> newMap = new LinkedHashMap<String, long[]>();
+	public List<long[]> getColorPixelsDataArrays() {
+		List<long[]> result = new ArrayList<long[]>();
 		Function<LineAuthorship, long[]> getIds = a -> {
 			long[] data = new long[a.getBlameSize()];
 			for (int i = 0; i < data.length; i++) {
@@ -66,12 +67,12 @@ public class LineAuthorshipOverCommits {
 			}
 			return data;
 		};
-		forEach((sha1, a) -> newMap.put(sha1, getIds.apply(a)));
-		return newMap;
+		forEach((sha1, a) -> result.add(getIds.apply(a)));
+		return result;
 	}
 	
-	public Map<String, long[]> getColorPixelMapSortedByAuthor() {
-		Map<String, long[]> newMap = new LinkedHashMap<String, long[]>();
+	public List<long[]> getColorPixelsDataArraysSortedByAuthor() {
+		List<long[]> result = new ArrayList<long[]>();
 		Function<LineAuthorship, long[]> getSortedIds = a -> {
 			long[] data = new long[a.getBlameSize()];
 			for (int i = 0; i < data.length; i++) {
@@ -80,8 +81,26 @@ public class LineAuthorshipOverCommits {
 			Arrays.sort(data);
 			return data;
 		};
-		forEach((sha1, a) -> newMap.put(sha1, getSortedIds.apply(a)));
-		return newMap;
+		forEach((sha1, a) -> result.add(getSortedIds.apply(a)));
+		return result;
+	}
+	
+	public List<String[]> getColorPixelsTitleArrays() {
+		List<String[]> result = new ArrayList<String[]>();
+		forEach((sha1, a) -> result.add(Arrays.stream(a.getAuthors())
+				.map(author -> author.toString())
+				.toArray(size -> new String[size])));
+		return result;
+	}
+	
+	public List<String[]> getColorPixelsTitleArraysSortedByAuthor() {
+		List<String[]> result = new ArrayList<String[]>();
+		forEach((sha1, a) -> result.add(Arrays.stream(a.getAuthors())
+				.sorted((a1, a2) -> Integer.compare(
+						getAuthorId(a1), getAuthorId(a2)))
+				.map(author -> author.toString())
+				.toArray(size -> new String[size])));
+		return result;
 	}
 	
 	protected void initAuthorIdMap() {

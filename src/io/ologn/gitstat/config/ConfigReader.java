@@ -3,16 +3,14 @@ package io.ologn.gitstat.config;
 import static io.ologn.gitstat.config.ConfigRunner.err;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
+import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import io.ologn.gitstat.utils.MyUtils;
 
 /**
  * Methods for reading the (slightly non-standard) JSON config 
@@ -29,9 +27,9 @@ public class ConfigReader {
 	 */
 	public static String parseConfigString(String configString) {
 		String[] lines = configString.split("\n");
-		List<String> filteredLines = Arrays.stream(lines)
+		String[] filteredLines = Arrays.stream(lines)
 				.filter(s -> !s.trim().startsWith("//"))
-				.collect(Collectors.toList());
+				.toArray(size -> new String[size]);
 		return String.join("\n", filteredLines);
 	}
 	
@@ -45,7 +43,8 @@ public class ConfigReader {
 	public static JSONObject read(Path path)
 			throws IOException, ParseException {
 		JSONParser parser = new JSONParser();
-		String configString = MyUtils.readFileToString(path);
+		String configString = FileUtils.readFileToString(path.toFile(),
+				Charset.defaultCharset());
 		configString = parseConfigString(configString);
 		JSONObject config = (JSONObject) parser.parse(configString);
 		return config;

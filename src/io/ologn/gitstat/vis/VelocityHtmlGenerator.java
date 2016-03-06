@@ -1,5 +1,6 @@
 package io.ologn.gitstat.vis;
 
+import java.io.File;
 import java.io.StringWriter;
 import java.util.Map;
 
@@ -13,6 +14,9 @@ import org.apache.velocity.app.VelocityEngine;
  *
  */
 public interface VelocityHtmlGenerator {
+	
+	public static final String TEMPLATE_DIR = "res" + File.separator
+			+ "velocity_templates" + File.separator;
 	
 	/**
 	 * Get the path of the template relative to the current working 

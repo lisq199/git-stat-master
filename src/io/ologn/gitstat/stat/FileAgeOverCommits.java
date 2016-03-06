@@ -1,8 +1,9 @@
 package io.ologn.gitstat.stat;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.stream.StreamSupport;
@@ -67,24 +68,24 @@ public class FileAgeOverCommits {
 				.get();
 	}
 	
-	public Map<String, long[]> getColorPixelsMap() {
-		Map<String, long[]> newMap = new LinkedHashMap<String, long[]>();
-		forEach((sha1, age) -> newMap.put(sha1, age.getAgesOfLinesInMillis()));
-		return newMap;
+	public List<long[]> getColorPixelsDataArrays() {
+		List<long[]> result = new ArrayList<long[]>();
+		forEach((sha1, age) -> result.add(age.getAgesOfLinesInMillis()));
+		return result;
 	}
 	
-	public Map<String, long[]> getColorPixelsMapSortedByAge(
+	public List<long[]> getColorPixelsDataArraysSortedByAge(
 			boolean ascending) {
-		Map<String, long[]> newMap = new LinkedHashMap<String, long[]>();
+		List<long[]> result = new ArrayList<long[]>();
 		forEach((sha1, age) -> {
 			long[] sortedAges = age.getAgesOfLinesInMillis();
 			Arrays.sort(sortedAges);
 			if (!ascending) {
 				ArrayUtils.reverse(sortedAges);
 			}
-			newMap.put(sha1, sortedAges);
+			result.add(sortedAges);
 		});
-		return newMap;
+		return result;
 	}
 	
 	/**

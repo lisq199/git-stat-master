@@ -2,6 +2,7 @@ package io.ologn.gitstat.vis;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -76,19 +77,21 @@ public class VisRunner {
 					git, repo, commits, filePath);
 			FileAgeOverCommits faoc = FileAgeOverCommits.calculate(
 					repo, fileAges, filePath, true);
-			Map<String, long[]> colorPixelMap;
+			List<long[]> colorPixelsDataArrays;
 			if (sortByAge) {
-				colorPixelMap = faoc.getColorPixelsMapSortedByAge(
-						sortByAgeAscending);
+				colorPixelsDataArrays = faoc
+						.getColorPixelsDataArraysSortedByAge(
+								sortByAgeAscending);
 			} else {
-				colorPixelMap = faoc.getColorPixelsMap();
+				colorPixelsDataArrays = faoc.getColorPixelsDataArrays();
 			}
 			String htmlString = ColorPixels.init()
 					.setPixelHeight(pixelHeight)
 					.setPixelWidth(pixelWidth)
 					.setColorCategory(ColorCategory.ORANGERED_TO_GREEN
 							.reverse())
-					.parseMap(colorPixelMap, displayVertical)
+					.parse(colorPixelsDataArrays, new ArrayList<String[]>(),
+							displayVertical)
 					.createHtmlString();
 			BrowserLauncher.launchWithHtmlText(htmlString);
 		} catch (IOException e) {
@@ -96,7 +99,6 @@ public class VisRunner {
 		} catch (NoHeadException e) {
 			e.printStackTrace();
 		} catch (GitAPIException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -113,17 +115,24 @@ public class VisRunner {
 					.calculateMultiple(git, repo, commits, filePath);
 			LineAuthorshipOverCommits laoc = LineAuthorshipOverCommits
 					.calculate(repo, lineAuthorships, filePath, true);
-			Map<String, long[]> colorPixelMap;
+			List<long[]> colorPixelsDataArrays;
+			List<String[]> colorPixelsTitleArrays;
 			if (sortByAuthor) {
-				colorPixelMap = laoc.getColorPixelMapSortedByAuthor();
+				colorPixelsDataArrays = laoc
+						.getColorPixelsDataArraysSortedByAuthor();
+				colorPixelsTitleArrays = laoc
+						.getColorPixelsTitleArraysSortedByAuthor();
 			} else {
-				colorPixelMap = laoc.getColorPixelMap();
+				colorPixelsDataArrays = laoc.getColorPixelsDataArrays();
+				colorPixelsTitleArrays = laoc.getColorPixelsTitleArrays();
 			}
+			
 			String htmlString = ColorPixels.init()
 					.setPixelHeight(pixelHeight)
 					.setPixelWidth(pixelWidth)
 					.setColorCategory(ColorCategory.D3_CATEGORY20)
-					.parseMap(colorPixelMap, displayVertical)
+					.parse(colorPixelsDataArrays, colorPixelsTitleArrays,
+							displayVertical)
 					.createHtmlString();
 			BrowserLauncher.launchWithHtmlText(htmlString);
 		} catch (IOException e) {
@@ -131,7 +140,6 @@ public class VisRunner {
 		} catch (NoHeadException e) {
 			e.printStackTrace();
 		} catch (GitAPIException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
