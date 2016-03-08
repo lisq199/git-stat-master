@@ -80,7 +80,7 @@ public class LineAuthorship implements BlameResultContainer {
 		return authors.clone();
 	}
 	
-	protected Comparator<GitAuthor> getGitAuthorComparatorByNumberOfLines(
+	protected Comparator<GitAuthor> getGitAuthorComparatorByContribution(
 			boolean ascending) {
 		return (a, b) -> {
 			int aLines = getNumberOfLinesWrittenBy(a);
@@ -99,9 +99,9 @@ public class LineAuthorship implements BlameResultContainer {
 	 * @param ascending
 	 * @return
 	 */
-	public GitAuthor[] getAuthorsSortedByNumberOfLines(boolean ascending) {
+	public GitAuthor[] getAuthorsSortedByContribution(boolean ascending) {
 		GitAuthor[] sortedAuthors = getAuthors();
-		Arrays.sort(authors, getGitAuthorComparatorByNumberOfLines(ascending));
+		Arrays.sort(authors, getGitAuthorComparatorByContribution(ascending));
 		return sortedAuthors;
 	}
 	
@@ -111,7 +111,7 @@ public class LineAuthorship implements BlameResultContainer {
 	 */
 	public GitAuthor getAuthorWithMostLines() {
 		return Arrays.stream(getAuthors())
-				.max(getGitAuthorComparatorByNumberOfLines(true))
+				.max(getGitAuthorComparatorByContribution(true))
 				.get();
 	}
 	
@@ -121,7 +121,7 @@ public class LineAuthorship implements BlameResultContainer {
 	 */
 	public GitAuthor getAuthorWithLeastLines() {
 		return Arrays.stream(getAuthors())
-				.min(getGitAuthorComparatorByNumberOfLines(true))
+				.min(getGitAuthorComparatorByContribution(true))
 				.get();
 	}
 	
@@ -131,7 +131,7 @@ public class LineAuthorship implements BlameResultContainer {
 	 * @param ascending
 	 * @return
 	 */
-	public Map<GitAuthor, Integer> getMapSortedByNumberOfLines(
+	public Map<GitAuthor, Integer> getMapSortedByContribution(
 			boolean ascending) {
 		return OlognMaps.sortByValue(map, ascending);
 	}
