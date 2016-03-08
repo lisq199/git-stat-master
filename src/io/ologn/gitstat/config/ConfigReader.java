@@ -29,7 +29,7 @@ public class ConfigReader {
 		String[] lines = configString.split("\n");
 		String[] filteredLines = Arrays.stream(lines)
 				.filter(s -> !s.trim().startsWith("//"))
-				.toArray(size -> new String[size]);
+				.toArray(String[]::new);
 		return String.join("\n", filteredLines);
 	}
 	

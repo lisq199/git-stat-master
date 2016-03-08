@@ -24,8 +24,15 @@ import io.ologn.gitstat.stat.LineAuthorshipOverCommits;
 import io.ologn.gitstat.tokenizer.TokenParser;
 import io.ologn.gitstat.vis.chartjs.ChartJsPie;
 
+/**
+ * For running visualizations.
+ * @author lisq199
+ */
 public class VisRunner {
 	
+	/**
+	 * The path to the ".git" file
+	 */
 	protected String dotGitPath;
 	
 	protected VisRunner() {}
@@ -35,6 +42,16 @@ public class VisRunner {
 		this.dotGitPath = dotGitPath;
 	}
 	
+	/**
+	 * Visualization type 1: 
+	 * Pie chart showing how much everyone owns a file at 
+	 * a specified commit.
+	 * @param filePath
+	 * @param revstr
+	 * @param parser
+	 * @param combineSmallValues
+	 * @param percentageForOther
+	 */
 	public void type1(String filePath, String revstr, TokenParser parser,
 			boolean combineSmallValues, double percentageForOther) {
 		try (
@@ -64,6 +81,16 @@ public class VisRunner {
 		}
 	}
 	
+	/**
+	 * Visualization type 2: Color pixels showing the age of 
+	 * each line of code over commits.
+	 * @param filePath
+	 * @param sortByAge
+	 * @param sortByAgeAscending
+	 * @param pixelHeight
+	 * @param pixelWidth
+	 * @param displayVertical
+	 */
 	public void type2(String filePath, boolean sortByAge,
 			boolean sortByAgeAscending,
 			int pixelHeight, int pixelWidth, boolean displayVertical) {
@@ -103,7 +130,18 @@ public class VisRunner {
 		}
 	}
 	
+	/**
+	 * Visualization type 3: Color pixels showing the authorship 
+	 * of each line of code over commits. 
+	 * @param filePath
+	 * @param sortByAuthor
+	 * @param sortByAuthorContribution
+	 * @param pixelHeight
+	 * @param pixelWidth
+	 * @param displayVertical
+	 */
 	public void type3(String filePath, boolean sortByAuthor,
+			boolean sortByAuthorContribution,
 			int pixelHeight, int pixelWidth, boolean displayVertical) {
 		try (
 			Git git = Git.open(new File(dotGitPath));
@@ -118,10 +156,19 @@ public class VisRunner {
 			List<long[]> colorPixelsDataArrays;
 			List<String[]> colorPixelsTitleArrays;
 			if (sortByAuthor) {
-				colorPixelsDataArrays = laoc
-						.getColorPixelsDataArraysSortedByAuthor();
-				colorPixelsTitleArrays = laoc
-						.getColorPixelsTitleArraysSortedByAuthor();
+				if (sortByAuthorContribution) {
+					colorPixelsDataArrays = laoc
+							.getColorPixelsDataArraysSortedByContribution(
+									false);
+					colorPixelsTitleArrays = laoc
+							.getColorPixelsTitleArraysSortedByContribution(
+									false);
+				} else {
+					colorPixelsDataArrays = laoc
+							.getColorPixelsDataArraysSortedByAuthorId();
+					colorPixelsTitleArrays = laoc
+							.getColorPixelsTitleArraysSortedByAuthorId();
+				}
 			} else {
 				colorPixelsDataArrays = laoc.getColorPixelsDataArrays();
 				colorPixelsTitleArrays = laoc.getColorPixelsTitleArrays();
@@ -144,6 +191,11 @@ public class VisRunner {
 		}
 	}
 	
+	/**
+	 * Initialize
+	 * @param dotGitPath
+	 * @return
+	 */
 	public static VisRunner init(String dotGitPath) {
 		return new VisRunner(dotGitPath);
 	}

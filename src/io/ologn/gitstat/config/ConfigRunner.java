@@ -102,6 +102,7 @@ public class ConfigRunner {
 		boolean sortByAge;
 		boolean sortByAgeAscending;
 		boolean sortByAuthor;
+		boolean sortByAuthorContribution;
 		int pixelHeight;
 		int pixelWidth;
 		boolean displayVertical;
@@ -133,11 +134,13 @@ public class ConfigRunner {
 		case 3:
 			filePath = ConfigReader.getString(config, "filePath");
 			sortByAuthor = ConfigReader.getBoolean(config, "sortByAuthor");
+			sortByAuthorContribution = ConfigReader.getBoolean(
+					config, "sortByAuthorContribution");
 			pixelHeight = ConfigReader.getInt(config, "pixelHeight");
 			pixelWidth = ConfigReader.getInt(config, "pixelWidth");
 			displayVertical = ConfigReader.getBoolean(config,
 					"displayVertical");
-			visRunner.type3(filePath, sortByAuthor,
+			visRunner.type3(filePath, sortByAuthor, sortByAuthorContribution,
 					pixelHeight, pixelWidth, displayVertical);
 			break;
 		default:

@@ -9,6 +9,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.jgit.lib.Repository;
 
 import io.ologn.gitstat.jgit.MiscJGitUtils;
@@ -58,6 +59,20 @@ public class LineAuthorshipOverCommits {
 		}
 	}
 	
+	/**
+	 * Get the author by the ID. Each author should have a unique ID.
+	 * @param id
+	 * @return
+	 */
+	public GitAuthor getAuthorById(int id) {
+		for (Map.Entry<GitAuthor, Integer> e : authorIdMap.entrySet()) {
+			if (e.getValue() == id) {
+				return e.getKey();
+			}
+		}
+		return null;
+	}
+	
 	public List<long[]> getColorPixelsDataArrays() {
 		List<long[]> result = new ArrayList<long[]>();
 		Function<LineAuthorship, long[]> getIds = a -> {
@@ -71,7 +86,7 @@ public class LineAuthorshipOverCommits {
 		return result;
 	}
 	
-	public List<long[]> getColorPixelsDataArraysSortedByAuthor() {
+	public List<long[]> getColorPixelsDataArraysSortedByAuthorId() {
 		List<long[]> result = new ArrayList<long[]>();
 		Function<LineAuthorship, long[]> getSortedIds = a -> {
 			long[] data = new long[a.getBlameSize()];
@@ -85,6 +100,33 @@ public class LineAuthorshipOverCommits {
 		return result;
 	}
 	
+	public List<long[]> getColorPixelsDataArraysSortedByContribution(
+			boolean ascending) {
+		List<long[]> result = new ArrayList<long[]>();
+		Function<LineAuthorship, long[]> getSortedIds = a -> {
+			long[] data = new long[a.getBlameSize()];
+			for (int i = 0; i < data.length; i++) {
+				data[i] = this.getAuthorId(a.getAuthorAtLine(i));
+			}
+			Long[] sortedData = Arrays.stream(ArrayUtils.toObject(data))
+					.sorted((x, y) -> {
+						int xLines = a.getNumberOfLinesWrittenBy(
+								getAuthorById(x.intValue()));
+						int yLines = a.getNumberOfLinesWrittenBy(
+								getAuthorById(y.intValue()));
+						if (ascending) {
+							return Integer.compare(xLines, yLines);
+						} else {
+							return Integer.compare(yLines, xLines);
+						}
+					})
+					.toArray(Long[]::new);
+			return ArrayUtils.toPrimitive(sortedData);
+		};
+		forEach((sha1, a) -> result.add(getSortedIds.apply(a)));
+		return result;
+	}
+	
 	public List<String[]> getColorPixelsTitleArrays() {
 		List<String[]> result = new ArrayList<String[]>();
 		forEach((sha1, a) -> result.add(Arrays.stream(a.getAuthors())
@@ -93,11 +135,29 @@ public class LineAuthorshipOverCommits {
 		return result;
 	}
 	
-	public List<String[]> getColorPixelsTitleArraysSortedByAuthor() {
+	public List<String[]> getColorPixelsTitleArraysSortedByAuthorId() {
 		List<String[]> result = new ArrayList<String[]>();
 		forEach((sha1, a) -> result.add(Arrays.stream(a.getAuthors())
 				.sorted((a1, a2) -> Integer.compare(
 						getAuthorId(a1), getAuthorId(a2)))
+				.map(author -> author.toString())
+				.toArray(size -> new String[size])));
+		return result;
+	}
+	
+	public List<String[]> getColorPixelsTitleArraysSortedByContribution(
+			boolean ascending) {
+		List<String[]> result = new ArrayList<String[]>();
+		forEach((sha1, a) -> result.add(Arrays.stream(a.getAuthors())
+				.sorted((a1, a2) -> {
+					int a1Lines = a.getNumberOfLinesWrittenBy(a1);
+					int a2Lines = a.getNumberOfLinesWrittenBy(a2);
+					if (ascending) {
+						return Integer.compare(a1Lines, a2Lines);
+					} else {
+						return Integer.compare(a2Lines, a1Lines);
+					}
+				})
 				.map(author -> author.toString())
 				.toArray(size -> new String[size])));
 		return result;
