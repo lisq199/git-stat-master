@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
@@ -27,10 +28,9 @@ public class ConfigReader {
 	 */
 	public static String parseConfigString(String configString) {
 		String[] lines = configString.split("\n");
-		String[] filteredLines = Arrays.stream(lines)
+		return Arrays.stream(lines)
 				.filter(s -> !s.trim().startsWith("//"))
-				.toArray(String[]::new);
-		return String.join("\n", filteredLines);
+				.collect(Collectors.joining("\n"));
 	}
 	
 	/**

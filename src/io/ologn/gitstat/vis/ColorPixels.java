@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import io.ologn.common.color.ColorCategory;
 import io.ologn.common.math.LinearScale;
@@ -115,7 +116,6 @@ public class ColorPixels implements VelocityHtmlGenerator {
 			List<String[]> titleArrays, boolean vertical) {
 		String rectTags = getRectTagsFromDataAndTitle(dataArrays, titleArrays,
 				pixelWidth, pixelHeight, colorCategory, vertical);
-		rectTags = optimizeRectTags(rectTags, vertical);
 		this.replaceMap.put(REPLACE_SVG, rectTags);
 		// calculate total width
 		int totalWidth = pixelWidth * dataArrays.size();
@@ -232,6 +232,7 @@ public class ColorPixels implements VelocityHtmlGenerator {
 				titleArray = titleArrays.get(i);
 			}
 			
+			StringBuilder columnBuilder = new StringBuilder();
 			int yOffset = 0;
 			for (int j = 0; j < dataArray.length; j++) {
 				String color = colorCategory.getColor(
@@ -251,10 +252,12 @@ public class ColorPixels implements VelocityHtmlGenerator {
 							color, title);
 				}
 				
-				builder.append(tt).append(rectTag).append("\n");
+				columnBuilder.append(tt).append(rectTag).append("\n");
 				
 				yOffset += pixelHeight;
 			}
+			builder.append(optimizeRectTags(columnBuilder.toString(),
+					vertical)).append("\n");
 			
 			xOffset += pixelWidth;
 		}
@@ -278,9 +281,9 @@ public class ColorPixels implements VelocityHtmlGenerator {
 			}
 			String currentFill = getStringAttr(tags[i], "fill");
 			String nextFill = getStringAttr(tags[i + 1], "fill");
-			String positionTag = vertical ? "x" : "y";
-			int currentPos = getIntAttr(tags[i], positionTag);
-			int nextPos = getIntAttr(tags[i + 1], positionTag);
+			String positionAttr = vertical ? "x" : "y";
+			int currentPos = getIntAttr(tags[i], positionAttr);
+			int nextPos = getIntAttr(tags[i + 1], positionAttr);
 			String currentTitle = getInnerTag(tags[i], "title");
 			String nextTitle = getInnerTag(tags[i + 1], "title");
 			
@@ -296,10 +299,9 @@ public class ColorPixels implements VelocityHtmlGenerator {
 				tags[i] = "";
 			}
 		}
-		String[] nonEmptyTags = Arrays.stream(tags)
+		return Arrays.stream(tags)
 				.filter(s -> !s.isEmpty())
-				.toArray(String[]::new);
-		return String.join("\n", nonEmptyTags);
+				.collect(Collectors.joining("\n"));
 	}
 	
 }

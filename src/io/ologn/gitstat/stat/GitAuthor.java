@@ -86,8 +86,11 @@ public class GitAuthor {
 	
 	@Override
 	public String toString() {
-		String result = "GitAuthor[" + name + ", " + email + "]";
-		return result;
+		return "GitAuthor[" + name + ", " + email + "]";
+	}
+	
+	public String toStringBasic() {
+		return name + ", " + email;
 	}
 
 }

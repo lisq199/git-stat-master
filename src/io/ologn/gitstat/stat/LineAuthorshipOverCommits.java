@@ -130,7 +130,7 @@ public class LineAuthorshipOverCommits {
 	public List<String[]> getColorPixelsTitleArrays() {
 		List<String[]> result = new ArrayList<String[]>();
 		forEach((sha1, a) -> result.add(Arrays.stream(a.getAuthors())
-				.map(author -> author.toString())
+				.map(author -> author.toStringBasic())
 				.toArray(size -> new String[size])));
 		return result;
 	}
@@ -140,7 +140,7 @@ public class LineAuthorshipOverCommits {
 		forEach((sha1, a) -> result.add(Arrays.stream(a.getAuthors())
 				.sorted((a1, a2) -> Integer.compare(
 						getAuthorId(a1), getAuthorId(a2)))
-				.map(author -> author.toString())
+				.map(author -> author.toStringBasic())
 				.toArray(size -> new String[size])));
 		return result;
 	}
@@ -158,7 +158,7 @@ public class LineAuthorshipOverCommits {
 						return Integer.compare(a2Lines, a1Lines);
 					}
 				})
-				.map(author -> author.toString())
+				.map(author -> author.toStringBasic())
 				.toArray(size -> new String[size])));
 		return result;
 	}
