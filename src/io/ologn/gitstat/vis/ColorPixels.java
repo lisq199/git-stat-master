@@ -184,8 +184,11 @@ public class ColorPixels implements VelocityHtmlGenerator {
 	 * @return
 	 */
 	protected static String getStringAttr(String tag, String attr) {
-		int fillIndex = tag.toLowerCase().indexOf(attr);
-		int equalsIndex = tag.indexOf('=', fillIndex);
+		int attrIndex = tag.toLowerCase().indexOf(attr);
+		if (attrIndex < 0) {
+			return "";
+		}
+		int equalsIndex = tag.indexOf('=', attrIndex);
 		int leftQuoteIndex = tag.indexOf("'", equalsIndex);
 		int rightQuoteIndex = tag.indexOf("'", leftQuoteIndex + 1);
 		return tag.substring(leftQuoteIndex + 1, rightQuoteIndex);
@@ -199,6 +202,9 @@ public class ColorPixels implements VelocityHtmlGenerator {
 	 */
 	protected static String getInnerTag(String tag, String innerTag) {
 		int leftTagIndex = tag.toLowerCase().indexOf("<" + innerTag + ">");
+		if (leftTagIndex < 0) {
+			return "";
+		}
 		int rightTagIndex = tag.toLowerCase().indexOf("</" + innerTag + ">",
 				leftTagIndex + 1);
 		int endIndex = tag.indexOf('>', rightTagIndex);
