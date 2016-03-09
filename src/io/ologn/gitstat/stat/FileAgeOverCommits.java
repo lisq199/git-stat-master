@@ -88,6 +88,37 @@ public class FileAgeOverCommits {
 		return result;
 	}
 	
+	public List<String[]> getColorPixelTitleArrays() {
+		List<String[]> result = new ArrayList<String[]>();
+		forEach((sha1, age) -> {
+			String[] titles = new String[age.getBlameSize()];
+			for (int i = 0; i < titles.length; i++) {
+				titles[i] = age.getAgeOfLine(i).toDays() + " days";
+			}
+			result.add(titles);
+		});
+		return result;
+	}
+	
+	public List<String[]> getColorPixelTitleArraysSortedByAge(
+			boolean ascending) {
+		List<String[]> result = new ArrayList<String[]>();
+		forEach((sha1, age) -> {
+			Duration[] sortedAges = age.getAgesOfLines();
+			if (ascending) {
+				Arrays.sort(sortedAges);
+			} else {
+				Arrays.sort(sortedAges, (a, b) -> b.compareTo(a));
+			}
+			String[] titles = new String[sortedAges.length];
+			for (int i = 0; i < titles.length; i++) {
+				titles[i] = sortedAges[i].toDays() + " days";
+			}
+			result.add(titles);
+		});
+		return result;
+	}
+	
 	/**
 	 * Calculate a FileAgeOverCommits object
 	 * @param repo

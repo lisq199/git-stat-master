@@ -2,7 +2,6 @@ package io.ologn.gitstat.vis;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -105,19 +104,24 @@ public class VisRunner {
 			FileAgeOverCommits faoc = FileAgeOverCommits.calculate(
 					repo, fileAges, filePath, true);
 			List<long[]> colorPixelsDataArrays;
+			List<String[]> colorPixelTitleArrays;
 			if (sortByAge) {
 				colorPixelsDataArrays = faoc
 						.getColorPixelsDataArraysSortedByAge(
 								sortByAgeAscending);
+				colorPixelTitleArrays = faoc
+						.getColorPixelTitleArraysSortedByAge(
+								sortByAgeAscending);
 			} else {
 				colorPixelsDataArrays = faoc.getColorPixelsDataArrays();
+				colorPixelTitleArrays = faoc.getColorPixelTitleArrays();
 			}
 			String htmlString = ColorPixels.init()
 					.setPixelHeight(pixelHeight)
 					.setPixelWidth(pixelWidth)
 					.setColorCategory(ColorCategory.ORANGERED_TO_GREEN
 							.reverse())
-					.parse(colorPixelsDataArrays, new ArrayList<String[]>(),
+					.parse(colorPixelsDataArrays, colorPixelTitleArrays,
 							displayVertical)
 					.createHtmlString();
 			BrowserLauncher.launchWithHtmlText(htmlString);
