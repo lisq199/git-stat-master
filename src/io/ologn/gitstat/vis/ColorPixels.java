@@ -113,9 +113,10 @@ public class ColorPixels implements VelocityHtmlGenerator {
 	 */
 	public ColorPixels parse(List<long[]> dataArrays,
 			List<String[]> titleArrays, boolean vertical) {
-		String svgTags = getSvgTagsFromDataAndTitle(dataArrays, titleArrays,
+		String rectTags = getRectTagsFromDataAndTitle(dataArrays, titleArrays,
 				pixelWidth, pixelHeight, colorCategory, vertical);
-		this.replaceMap.put(REPLACE_SVG, svgTags);
+		rectTags = optimizeRectTags(rectTags, vertical);
+		this.replaceMap.put(REPLACE_SVG, rectTags);
 		// calculate total width
 		int totalWidth = pixelWidth * dataArrays.size();
 		// calculate total Height
@@ -163,7 +164,48 @@ public class ColorPixels implements VelocityHtmlGenerator {
 		return result;
 	}
 	
-	protected static String getSvgTagsFromDataAndTitle(
+	/**
+	 * Get an integer attribute from an HTML tag
+	 * @param tag
+	 * @param attr
+	 * @return
+	 */
+	protected static int getIntAttr(String tag, String attr) {
+		int attrIndex = tag.toLowerCase().indexOf(attr);
+		int equalsIndex = tag.indexOf('=', attrIndex);
+		int spaceIndex = tag.indexOf(" ", equalsIndex);
+		return Integer.parseInt(tag.substring(equalsIndex + 1, spaceIndex));
+	}
+	
+	/**
+	 * Get a String attribute from an HTML tag
+	 * @param tag
+	 * @param attr
+	 * @return
+	 */
+	protected static String getStringAttr(String tag, String attr) {
+		int fillIndex = tag.toLowerCase().indexOf(attr);
+		int equalsIndex = tag.indexOf('=', fillIndex);
+		int leftQuoteIndex = tag.indexOf("'", equalsIndex);
+		int rightQuoteIndex = tag.indexOf("'", leftQuoteIndex + 1);
+		return tag.substring(leftQuoteIndex + 1, rightQuoteIndex);
+	}
+	
+	/**
+	 * Get a tag within an HTML tag
+	 * @param tag
+	 * @param innerTag
+	 * @return
+	 */
+	protected static String getInnerTag(String tag, String innerTag) {
+		int leftTagIndex = tag.toLowerCase().indexOf("<" + innerTag + ">");
+		int rightTagIndex = tag.toLowerCase().indexOf("</" + innerTag + ">",
+				leftTagIndex + 1);
+		int endIndex = tag.indexOf('>', rightTagIndex);
+		return tag.substring(leftTagIndex, endIndex + 1);
+	}
+	
+	protected static String getRectTagsFromDataAndTitle(
 			List<long[]> dataArrays, List<String[]> titleArrays,
 			int pixelWidth, int pixelHeight,
 			ColorCategory colorCategory, boolean vertical) {
@@ -217,8 +259,47 @@ public class ColorPixels implements VelocityHtmlGenerator {
 			xOffset += pixelWidth;
 		}
 		
-		
 		return builder.toString();
+	}
+	
+	/**
+	 * Optimize the rect tags, so that multiple color pixels 
+	 * of the same color are combined into one.
+	 * @param rectTags
+	 * @param vertical
+	 * @return
+	 */
+	protected static String optimizeRectTags(String rectTags,
+			boolean vertical) {
+		String[] tags = rectTags.split("\n");
+		for (int i = 0; i < tags.length - 1; i++) {
+			if (tags[i].isEmpty()) {
+				continue;
+			}
+			String currentFill = getStringAttr(tags[i], "fill");
+			String nextFill = getStringAttr(tags[i + 1], "fill");
+			String positionTag = vertical ? "x" : "y";
+			int currentPos = getIntAttr(tags[i], positionTag);
+			int nextPos = getIntAttr(tags[i + 1], positionTag);
+			String currentTitle = getInnerTag(tags[i], "title");
+			String nextTitle = getInnerTag(tags[i + 1], "title");
+			
+			if (currentFill.equalsIgnoreCase(nextFill)
+					&& currentPos == nextPos
+					&& currentTitle.equalsIgnoreCase(nextTitle)) {
+				String tagName = vertical ? "height" : "width";
+				int currentVal = getIntAttr(tags[i], tagName);
+				int nextVal = getIntAttr(tags[i + 1], tagName);
+				int newVal = currentVal + nextVal;
+				tags[i + 1] = tags[i].replace(tagName + '=' + currentVal,
+						tagName + '=' + newVal);
+				tags[i] = "";
+			}
+		}
+		String[] nonEmptyTags = Arrays.stream(tags)
+				.filter(s -> !s.isEmpty())
+				.toArray(String[]::new);
+		return String.join("\n", nonEmptyTags);
 	}
 	
 }
