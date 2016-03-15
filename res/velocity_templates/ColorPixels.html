@@ -14,9 +14,14 @@
 	<svg id="graph" class="graph">
 $svgTags
 	</svg>
+	<svg id="legend" class="legend">
+$legendTags
+	</svg>
 	<script>
 		document.getElementById('graph').setAttribute("width", $totalWidth);
 		document.getElementById('graph').setAttribute("height", $totalHeight);
+		document.getElementById('legend').setAttribute("width", $totalWidth);
+		document.getElementById('legend').setAttribute("height", $legendHeight);
 	</script>
 </body>
 </html>

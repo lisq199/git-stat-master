@@ -26,9 +26,13 @@ public class ColorPixels implements VelocityHtmlGenerator {
 	public static final int PIXEL_WITDH = 5;
 	public static final int PIXEL_HEIGHT = 5;
 	
+	public static final int LEGEND_SIZE = 16;
+	
 	public static final String REPLACE_SVG = "svgTags",
 			REPLACE_TOTAL_WIDTH = "totalWidth",
-			REPLACE_TOTAL_HEIGHT = "totalHeight";
+			REPLACE_TOTAL_HEIGHT = "totalHeight",
+			REPLACE_LEGEND = "legendTags",
+			REPLACE_LEGEND_HEIGHT = "legendHeight";
 	
 	protected Map<String, String> replaceMap;
 	protected int pixelWidth;
@@ -117,6 +121,7 @@ public class ColorPixels implements VelocityHtmlGenerator {
 		String rectTags = getRectTagsFromDataAndTitle(dataArrays, titleMap,
 				pixelWidth, pixelHeight, colorCategory, vertical);
 		this.replaceMap.put(REPLACE_SVG, rectTags);
+		
 		// calculate total width
 		int totalWidth = pixelWidth * dataArrays.size();
 		// calculate total Height
@@ -130,6 +135,13 @@ public class ColorPixels implements VelocityHtmlGenerator {
 				"" + (vertical ? totalWidth : totalHeight));
 		this.replaceMap.put(REPLACE_TOTAL_HEIGHT,
 				"" + (vertical ? totalHeight : totalWidth));
+		
+		String legendTags = getLegendTags(dataArrays, titleMap, colorCategory);
+		this.replaceMap.put(REPLACE_LEGEND, legendTags);
+		
+		int legendHeight = (LEGEND_SIZE + 4) * titleMap.size();
+		this.replaceMap.put(REPLACE_LEGEND_HEIGHT, "" + legendHeight);
+		
 		return this;
 	}
 
@@ -162,6 +174,18 @@ public class ColorPixels implements VelocityHtmlGenerator {
 			result += "><title>" + title + "</title></rect>";
 		}
 		return result;
+	}
+	
+	/**
+	 * Get a svg text tag
+	 * @param x
+	 * @param y
+	 * @param text
+	 * @return
+	 */
+	protected static String getTextTag(int x, int y, String text) {
+		return "<text x=" + x + " y=" + y + " font-size=" + LEGEND_SIZE
+				+ " fill='black'>" + text + "</text>";
 	}
 	
 	/**
@@ -211,6 +235,19 @@ public class ColorPixels implements VelocityHtmlGenerator {
 		return tag.substring(leftTagIndex, endIndex + 1);
 	}
 	
+	protected static LinearScale getColorScale(List<long[]> dataArrays,
+			ColorCategory colorCategory) {
+		long min = dataArrays.stream()
+				.map(a -> Arrays.stream(a).min().getAsLong())
+				.min(Long::compare)
+				.get();
+		long max = dataArrays.stream()
+				.map(a -> Arrays.stream(a).max().getAsLong())
+				.max(Long::compare)
+				.get();
+		return colorCategory.getLinearScale(min, max);
+	}
+	
 	/**
 	 * Get (a lot of) SVG rect tags for visualization.
 	 * @param dataArrays
@@ -227,20 +264,11 @@ public class ColorPixels implements VelocityHtmlGenerator {
 			ColorCategory colorCategory, boolean vertical) {
 		final String tt = "\t\t";
 		
-		long min = dataArrays.stream()
-				.map(a -> Arrays.stream(a).min().getAsLong())
-				.min(Long::compare)
-				.get();
-		long max = dataArrays.stream()
-				.map(a -> Arrays.stream(a).max().getAsLong())
-				.max(Long::compare)
-				.get();
-		
 		if (titleMap == null) {
 			titleMap = new HashMap<Long, String>();
 		}
 		
-		LinearScale colorScale = colorCategory.getLinearScale(min, max);
+		LinearScale colorScale = getColorScale(dataArrays, colorCategory);
 		
 		StringBuilder builder = new StringBuilder();
 		
@@ -318,6 +346,36 @@ public class ColorPixels implements VelocityHtmlGenerator {
 		return Arrays.stream(tags)
 				.filter(s -> !s.isEmpty())
 				.collect(Collectors.joining("\n"));
+	}
+	
+	protected static String getLegendTags(List<long[]> dataArrays,
+			Map<Long, String> titleMap, ColorCategory colorCategory) {
+		final String tt = "\t\t";
+		LinearScale colorScale = getColorScale(dataArrays, colorCategory);
+		StringBuilder builder = new StringBuilder();
+		
+		final int step = LEGEND_SIZE + 4;
+		final int rectXOffset = 5;
+		final int textXOffset = rectXOffset + step;
+		final int textYOffset = LEGEND_SIZE - 2;
+		
+		int yOffset = 5;
+		
+		for (Map.Entry<Long, String> entry : titleMap.entrySet()) {
+			String rectFill = colorCategory.getColor(entry.getKey(),
+					colorScale);
+			String title = entry.getValue();
+			String rectTag = getRectTag(rectXOffset, yOffset,
+					LEGEND_SIZE, LEGEND_SIZE, rectFill, title);
+			String textTag = getTextTag(textXOffset, yOffset + textYOffset,
+					title);
+			builder.append(tt).append(rectTag).append("\n")
+					.append(tt).append(textTag).append("\n");
+			
+			yOffset += step;
+		}
+		
+		return builder.toString();
 	}
 	
 }

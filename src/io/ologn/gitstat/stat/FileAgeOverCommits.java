@@ -3,9 +3,9 @@ package io.ologn.gitstat.stat;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.stream.StreamSupport;
 
@@ -121,14 +121,16 @@ public class FileAgeOverCommits {
 	}
 	
 	public Map<Long, String> getColorPixelsTitleMap() {
-		Map<Long, String> titleMap = new HashMap<Long, String>();
+		Map<Long, String> titleMap = new TreeMap<Long, String>(Long::compare);
 		forEach((sha1, age) -> {
 			long[] agesInMillis = age.getAgesOfLinesInMillis();
 			Duration[] agesInDuration = age.getAgesOfLines();
 			for (int i = 0; i < agesInMillis.length; i++) {
 				if (!titleMap.containsKey(agesInMillis[i])) {
 					titleMap.put(agesInMillis[i],
-							agesInDuration[i].toDays() + " days");
+							agesInMillis[i] + " millis ("
+									+ agesInDuration[i].toDays()
+									+ " days)");
 				}
 			}
 		});
