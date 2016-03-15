@@ -113,8 +113,8 @@ public class ColorPixels implements VelocityHtmlGenerator {
 	 * @return
 	 */
 	public ColorPixels parse(List<long[]> dataArrays,
-			List<String[]> titleArrays, boolean vertical) {
-		String rectTags = getRectTagsFromDataAndTitle(dataArrays, titleArrays,
+			Map<Long, String> titleMap, boolean vertical) {
+		String rectTags = getRectTagsFromDataAndTitle(dataArrays, titleMap,
 				pixelWidth, pixelHeight, colorCategory, vertical);
 		this.replaceMap.put(REPLACE_SVG, rectTags);
 		// calculate total width
@@ -211,8 +211,18 @@ public class ColorPixels implements VelocityHtmlGenerator {
 		return tag.substring(leftTagIndex, endIndex + 1);
 	}
 	
+	/**
+	 * Get (a lot of) SVG rect tags for visualization.
+	 * @param dataArrays
+	 * @param titleArrays
+	 * @param pixelWidth
+	 * @param pixelHeight
+	 * @param colorCategory
+	 * @param vertical
+	 * @return
+	 */
 	protected static String getRectTagsFromDataAndTitle(
-			List<long[]> dataArrays, List<String[]> titleArrays,
+			List<long[]> dataArrays, Map<Long, String> titleMap,
 			int pixelWidth, int pixelHeight,
 			ColorCategory colorCategory, boolean vertical) {
 		final String tt = "\t\t";
@@ -226,6 +236,10 @@ public class ColorPixels implements VelocityHtmlGenerator {
 				.max(Long::compare)
 				.get();
 		
+		if (titleMap == null) {
+			titleMap = new HashMap<Long, String>();
+		}
+		
 		LinearScale colorScale = colorCategory.getLinearScale(min, max);
 		
 		StringBuilder builder = new StringBuilder();
@@ -233,10 +247,6 @@ public class ColorPixels implements VelocityHtmlGenerator {
 		int xOffset = 0;
 		for (int i = 0; i < dataArrays.size(); i++) {
 			long[] dataArray = dataArrays.get(i);
-			String[] titleArray = new String[0];
-			if (i < titleArrays.size()) {
-				titleArray = titleArrays.get(i);
-			}
 			
 			StringBuilder columnBuilder = new StringBuilder();
 			int yOffset = 0;
@@ -244,8 +254,8 @@ public class ColorPixels implements VelocityHtmlGenerator {
 				String color = colorCategory.getColor(
 						dataArray[j], colorScale);
 				String title = "";
-				if (j < titleArray.length) {
-					title = titleArray[j];
+				if (titleMap.containsKey(dataArray[j])) {
+					title = titleMap.get(dataArray[j]);
 				}
 				String rectTag;
 				if (vertical) {

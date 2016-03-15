@@ -159,8 +159,7 @@ public class FileAuthorship implements BlameResultContainer {
 		// Use LinkedHashMap to preserve the ordering
 		Map<String, Double> newMap = new LinkedHashMap<String, Double>();
 		this.forEach((author, score) -> {
-			newMap.put(author.getName() + " (" + author.getEmail() + ")",
-					this.getPercentage(author));
+			newMap.put(author.toStringBasic(), this.getPercentage(author));
 		});
 		return newMap;
 	}

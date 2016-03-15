@@ -163,6 +163,14 @@ public class LineAuthorshipOverCommits {
 		return result;
 	}
 	
+	public Map<Long, String> getColorPixelsTitleMap() {
+		Map<Long, String> titleMap = new HashMap<Long, String>();
+		authorIdMap.forEach((author, id) -> {
+			titleMap.put(id.longValue(), author.toStringBasic());
+		});
+		return titleMap;
+	}
+	
 	protected void initAuthorIdMap() {
 		int id = 0;
 		for (LineAuthorship authorship : map.values()) {

@@ -104,24 +104,21 @@ public class VisRunner {
 			FileAgeOverCommits faoc = FileAgeOverCommits.calculate(
 					repo, fileAges, filePath, true);
 			List<long[]> colorPixelsDataArrays;
-			List<String[]> colorPixelTitleArrays;
+			Map<Long, String> colorPixelsTitleMap =
+					faoc.getColorPixelsTitleMap();
 			if (sortByAge) {
 				colorPixelsDataArrays = faoc
 						.getColorPixelsDataArraysSortedByAge(
 								sortByAgeAscending);
-				colorPixelTitleArrays = faoc
-						.getColorPixelTitleArraysSortedByAge(
-								sortByAgeAscending);
 			} else {
 				colorPixelsDataArrays = faoc.getColorPixelsDataArrays();
-				colorPixelTitleArrays = faoc.getColorPixelTitleArrays();
 			}
 			String htmlString = ColorPixels.init()
 					.setPixelHeight(pixelHeight)
 					.setPixelWidth(pixelWidth)
 					.setColorCategory(ColorCategory.ORANGERED_TO_GREEN
 							.reverse())
-					.parse(colorPixelsDataArrays, colorPixelTitleArrays,
+					.parse(colorPixelsDataArrays, colorPixelsTitleMap,
 							displayVertical)
 					.createHtmlString();
 			BrowserLauncher.launchWithHtmlText(htmlString);
@@ -158,31 +155,26 @@ public class VisRunner {
 			LineAuthorshipOverCommits laoc = LineAuthorshipOverCommits
 					.calculate(repo, lineAuthorships, filePath, true);
 			List<long[]> colorPixelsDataArrays;
-			List<String[]> colorPixelsTitleArrays;
+			Map<Long, String> colorPixelsTitleMap =
+					laoc.getColorPixelsTitleMap();
 			if (sortByAuthor) {
 				if (sortByAuthorContribution) {
 					colorPixelsDataArrays = laoc
 							.getColorPixelsDataArraysSortedByContribution(
 									false);
-					colorPixelsTitleArrays = laoc
-							.getColorPixelsTitleArraysSortedByContribution(
-									false);
 				} else {
 					colorPixelsDataArrays = laoc
 							.getColorPixelsDataArraysSortedByAuthorId();
-					colorPixelsTitleArrays = laoc
-							.getColorPixelsTitleArraysSortedByAuthorId();
 				}
 			} else {
 				colorPixelsDataArrays = laoc.getColorPixelsDataArrays();
-				colorPixelsTitleArrays = laoc.getColorPixelsTitleArrays();
 			}
 			
 			String htmlString = ColorPixels.init()
 					.setPixelHeight(pixelHeight)
 					.setPixelWidth(pixelWidth)
 					.setColorCategory(ColorCategory.D3_CATEGORY20)
-					.parse(colorPixelsDataArrays, colorPixelsTitleArrays,
+					.parse(colorPixelsDataArrays, colorPixelsTitleMap,
 							displayVertical)
 					.createHtmlString();
 			BrowserLauncher.launchWithHtmlText(htmlString);

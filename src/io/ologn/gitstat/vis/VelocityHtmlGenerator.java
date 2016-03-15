@@ -40,12 +40,13 @@ public interface VelocityHtmlGenerator {
 	}
 	
 	/**
-	 * Intended for internal use, but it's probably reusable.
+	 * Replace all the Strings that need to be replaced, and 
+	 * return the result as a String.
 	 * @param templatePath
 	 * @param replaceMap
 	 * @return
 	 */
-	public static String replace(String templatePath,
+	static String replace(String templatePath,
 			Map<String, String> replaceMap) {
 		VelocityEngine ve = new VelocityEngine();
 		ve.init();
