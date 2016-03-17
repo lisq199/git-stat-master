@@ -176,8 +176,8 @@ public class ColorPixels implements VelocityHtmlGenerator {
 	 */
 	protected static String getRectTag(int x, int y, int width, int height,
 			String style, String title) {
-		String result = "<rect x=" + x + " y=" + y + " width=" + width
-				+ " height=" + height + " style='" + style + "'";
+		String result = "<rect x='" + x + "' y='" + y + "' width='" + width
+				+ "' height='" + height + "' style='" + style + "'";
 		if (title == null || title.isEmpty()) {
 			result += " />";
 		} else {
@@ -194,8 +194,8 @@ public class ColorPixels implements VelocityHtmlGenerator {
 	 * @return
 	 */
 	protected static String getTextTag(int x, int y, String text) {
-		return "<text x=" + x + " y=" + y + " font-size=" + LEGEND_SIZE
-				+ ">" + text + "</text>";
+		return "<text x='" + x + "' y='" + y + "' font-size='" + LEGEND_SIZE
+				+ "'>" + text + "</text>";
 	}
 	
 	/**
@@ -205,10 +205,7 @@ public class ColorPixels implements VelocityHtmlGenerator {
 	 * @return
 	 */
 	protected static int getIntAttr(String tag, String attr) {
-		int attrIndex = tag.toLowerCase().indexOf(attr);
-		int equalsIndex = tag.indexOf('=', attrIndex);
-		int spaceIndex = tag.indexOf(" ", equalsIndex);
-		return Integer.parseInt(tag.substring(equalsIndex + 1, spaceIndex));
+		return Integer.parseInt(getStringAttr(tag, attr));
 	}
 	
 	/**
@@ -349,8 +346,8 @@ public class ColorPixels implements VelocityHtmlGenerator {
 			if (tags[i].isEmpty()) {
 				continue;
 			}
-			String currentFill = getStringAttr(tags[i], "fill");
-			String nextFill = getStringAttr(tags[i + 1], "fill");
+			String currentFill = getStringAttr(tags[i], "style");
+			String nextFill = getStringAttr(tags[i + 1], "style");
 			String positionAttr = vertical ? "x" : "y";
 			int currentPos = getIntAttr(tags[i], positionAttr);
 			int nextPos = getIntAttr(tags[i + 1], positionAttr);
@@ -364,8 +361,8 @@ public class ColorPixels implements VelocityHtmlGenerator {
 				int currentVal = getIntAttr(tags[i], tagName);
 				int nextVal = getIntAttr(tags[i + 1], tagName);
 				int newVal = currentVal + nextVal;
-				tags[i + 1] = tags[i].replace(tagName + '=' + currentVal,
-						tagName + '=' + newVal);
+				tags[i + 1] = tags[i].replace(tagName + "='" + currentVal,
+						tagName + "='" + newVal);
 				tags[i] = "";
 			}
 		}
