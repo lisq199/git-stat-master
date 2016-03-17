@@ -136,7 +136,7 @@ public class LineAuthorshipOverCommits {
 		List<String[]> result = new ArrayList<String[]>();
 		forEach((sha1, a) -> result.add(Arrays.stream(a.getAuthors())
 				.map(author -> author.toStringBasic())
-				.toArray(size -> new String[size])));
+				.toArray(String[]::new)));
 		return result;
 	}
 	
@@ -146,7 +146,7 @@ public class LineAuthorshipOverCommits {
 				.sorted((a1, a2) -> Integer.compare(
 						getAuthorId(a1), getAuthorId(a2)))
 				.map(author -> author.toStringBasic())
-				.toArray(size -> new String[size])));
+				.toArray(String[]::new)));
 		return result;
 	}
 	
@@ -164,7 +164,7 @@ public class LineAuthorshipOverCommits {
 					}
 				})
 				.map(author -> author.toStringBasic())
-				.toArray(size -> new String[size])));
+				.toArray(String[]::new)));
 		return result;
 	}
 	
@@ -184,7 +184,12 @@ public class LineAuthorshipOverCommits {
 			StringBuilder builder = new StringBuilder();
 			builder.append("SHA-1: ").append(sha1).append(ColorPixels.HTML_LF);
 			Date authorDate = MiscJGitUtils.getAuthorTimeFromSha1(repo, sha1);
-			builder.append("Commit Author Date: " + authorDate);
+			builder.append("Commit Author Date: ").append(authorDate)
+					.append(ColorPixels.HTML_LF);
+			long commitSeconds = MiscJGitUtils.getCommitTimeFromSha1(
+					repo, sha1);
+			Date commitDate = new Date(commitSeconds * 1000l);
+			builder.append("Commit Time: ").append(commitDate);
 			result.add(builder.toString());
 		}
 		return result;

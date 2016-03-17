@@ -151,7 +151,12 @@ public class FileAgeOverCommits {
 			StringBuilder builder = new StringBuilder();
 			builder.append("SHA-1: ").append(sha1).append(ColorPixels.HTML_LF);
 			Date authorDate = MiscJGitUtils.getAuthorTimeFromSha1(repo, sha1);
-			builder.append("Commit Author Date: " + authorDate);
+			builder.append("Commit Author Date: ").append(authorDate)
+					.append(ColorPixels.HTML_LF);
+			long commitSeconds = MiscJGitUtils.getCommitTimeFromSha1(
+					repo, sha1);
+			Date commitDate = new Date(commitSeconds * 1000l);
+			builder.append("Commit Time: ").append(commitDate);
 			result.add(builder.toString());
 		}
 		return result;
