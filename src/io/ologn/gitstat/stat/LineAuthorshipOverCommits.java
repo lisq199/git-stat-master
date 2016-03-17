@@ -1,7 +1,9 @@
 package io.ologn.gitstat.stat;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,9 +12,12 @@ import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.eclipse.jgit.errors.IncorrectObjectTypeException;
+import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.Repository;
 
 import io.ologn.gitstat.jgit.MiscJGitUtils;
+import io.ologn.gitstat.vis.ColorPixels;
 
 /**
  * Objects representing the author of each line of code in a file 
@@ -169,6 +174,20 @@ public class LineAuthorshipOverCommits {
 			titleMap.put(id.longValue(), author.toStringBasic());
 		});
 		return titleMap;
+	}
+	
+	public List<String> getColorPixelsDatasetDescriptions(
+			Repository repo) throws MissingObjectException,
+	IncorrectObjectTypeException, IOException {
+		List<String> result = new ArrayList<String>();
+		for (String sha1 : map.keySet()) {
+			StringBuilder builder = new StringBuilder();
+			builder.append("SHA-1: ").append(sha1).append(ColorPixels.HTML_LF);
+			Date authorDate = MiscJGitUtils.getAuthorTimeFromSha1(repo, sha1);
+			builder.append("Commit Author Date: " + authorDate);
+			result.add(builder.toString());
+		}
+		return result;
 	}
 	
 	protected void initAuthorIdMap() {

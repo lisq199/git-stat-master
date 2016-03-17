@@ -1,8 +1,10 @@
 package io.ologn.gitstat.stat;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -10,9 +12,12 @@ import java.util.function.BiConsumer;
 import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.eclipse.jgit.errors.IncorrectObjectTypeException;
+import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.Repository;
 
 import io.ologn.gitstat.jgit.MiscJGitUtils;
+import io.ologn.gitstat.vis.ColorPixels;
 
 /**
  * Objects representing the age of one file over multiple commits
@@ -127,14 +132,29 @@ public class FileAgeOverCommits {
 			Duration[] agesInDuration = age.getAgesOfLines();
 			for (int i = 0; i < agesInMillis.length; i++) {
 				if (!titleMap.containsKey(agesInMillis[i])) {
-					titleMap.put(agesInMillis[i],
-							agesInMillis[i] + " millis ("
-									+ agesInDuration[i].toDays()
-									+ " days)");
+					String title = "Age of the line: " 
+							+ agesInMillis[i] + " millis ("
+							+ agesInDuration[i].toDays()
+							+ " days)";
+					titleMap.put(agesInMillis[i], title);
 				}
 			}
 		});
 		return titleMap;
+	}
+	
+	public List<String> getColorPixelsDatasetDescriptions(
+			Repository repo) throws MissingObjectException,
+	IncorrectObjectTypeException, IOException {
+		List<String> result = new ArrayList<String>();
+		for (String sha1 : map.keySet()) {
+			StringBuilder builder = new StringBuilder();
+			builder.append("SHA-1: ").append(sha1).append(ColorPixels.HTML_LF);
+			Date authorDate = MiscJGitUtils.getAuthorTimeFromSha1(repo, sha1);
+			builder.append("Commit Author Date: " + authorDate);
+			result.add(builder.toString());
+		}
+		return result;
 	}
 	
 	/**

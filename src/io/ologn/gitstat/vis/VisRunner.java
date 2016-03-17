@@ -106,6 +106,8 @@ public class VisRunner {
 			List<long[]> colorPixelsDataArrays;
 			Map<Long, String> colorPixelsTitleMap =
 					faoc.getColorPixelsTitleMap();
+			List<String> colorPixelsDatasetDescriptions = 
+					faoc.getColorPixelsDatasetDescriptions(repo);
 			if (sortByAge) {
 				colorPixelsDataArrays = faoc
 						.getColorPixelsDataArraysSortedByAge(
@@ -119,6 +121,7 @@ public class VisRunner {
 					.setColorCategory(ColorCategory.ORANGERED_TO_GREEN
 							.reverse())
 					.parse(colorPixelsDataArrays, colorPixelsTitleMap,
+							colorPixelsDatasetDescriptions,
 							displayVertical)
 					.createHtmlString();
 			BrowserLauncher.launchWithHtmlText(htmlString);
@@ -157,6 +160,8 @@ public class VisRunner {
 			List<long[]> colorPixelsDataArrays;
 			Map<Long, String> colorPixelsTitleMap =
 					laoc.getColorPixelsTitleMap();
+			List<String> colorPixelsDatasetDescriptions =
+					laoc.getColorPixelsDatasetDescriptions(repo);
 			if (sortByAuthor) {
 				if (sortByAuthorContribution) {
 					colorPixelsDataArrays = laoc
@@ -175,6 +180,7 @@ public class VisRunner {
 					.setPixelWidth(pixelWidth)
 					.setColorCategory(ColorCategory.D3_CATEGORY20)
 					.parse(colorPixelsDataArrays, colorPixelsTitleMap,
+							colorPixelsDatasetDescriptions,
 							displayVertical)
 					.createHtmlString();
 			BrowserLauncher.launchWithHtmlText(htmlString);
