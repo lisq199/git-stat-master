@@ -95,6 +95,19 @@ public class FileAge implements BlameResultContainer {
 		}
 		return ages;
 	}
+	
+	/**
+	 * Get an array representing the age of each line in days.
+	 * @return
+	 */
+	public long[] getAgesOfLinesInDays() {
+		int len = ages.length;
+		long[] ages = new long[len];
+		for (int i = 0; i < len; i++) {
+			ages[i] = getAgeOfLine(i).toDays();
+		}
+		return ages;
+	}
 
 	/**
 	 * Access the array directly instead of calculating it again

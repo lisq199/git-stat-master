@@ -127,6 +127,13 @@ public class ColorPixels implements VelocityHtmlGenerator {
 	public ColorPixels parse(List<long[]> dataArrays,
 			Map<Long, String> titleMap, List<String> datasetDescriptions,
 			boolean vertical) {
+		if (titleMap == null) {
+			titleMap = new HashMap<Long, String>();
+		}
+		if (datasetDescriptions == null) {
+			datasetDescriptions = new ArrayList<String>();
+		}
+		
 		String rectTags = getRectTagsFromDataAndTitle(dataArrays, titleMap,
 				datasetDescriptions,
 				pixelWidth, pixelHeight, colorCategory, vertical);
@@ -272,13 +279,6 @@ public class ColorPixels implements VelocityHtmlGenerator {
 			int pixelWidth, int pixelHeight,
 			ColorCategory colorCategory, boolean vertical) {
 		final String tt = "\t\t";
-		
-		if (titleMap == null) {
-			titleMap = new HashMap<Long, String>();
-		}
-		if (datasetDescriptions == null) {
-			datasetDescriptions = new ArrayList<String>();
-		}
 		
 		LinearScale colorScale = getColorScale(dataArrays, colorCategory);
 		

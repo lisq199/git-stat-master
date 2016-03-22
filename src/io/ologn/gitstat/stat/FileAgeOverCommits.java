@@ -76,7 +76,7 @@ public class FileAgeOverCommits {
 	
 	public List<long[]> getColorPixelsDataArrays() {
 		List<long[]> result = new ArrayList<long[]>();
-		forEach((sha1, age) -> result.add(age.getAgesOfLinesInMillis()));
+		forEach((sha1, age) -> result.add(age.getAgesOfLinesInDays()));
 		return result;
 	}
 	
@@ -84,7 +84,7 @@ public class FileAgeOverCommits {
 			boolean ascending) {
 		List<long[]> result = new ArrayList<long[]>();
 		forEach((sha1, age) -> {
-			long[] sortedAges = age.getAgesOfLinesInMillis();
+			long[] sortedAges = age.getAgesOfLinesInDays();
 			Arrays.sort(sortedAges);
 			if (!ascending) {
 				ArrayUtils.reverse(sortedAges);
@@ -128,15 +128,12 @@ public class FileAgeOverCommits {
 	public Map<Long, String> getColorPixelsTitleMap() {
 		Map<Long, String> titleMap = new TreeMap<Long, String>(Long::compare);
 		forEach((sha1, age) -> {
-			long[] agesInMillis = age.getAgesOfLinesInMillis();
-			Duration[] agesInDuration = age.getAgesOfLines();
-			for (int i = 0; i < agesInMillis.length; i++) {
-				if (!titleMap.containsKey(agesInMillis[i])) {
+			long[] agesInDays = age.getAgesOfLinesInDays();
+			for (int i = 0; i < agesInDays.length; i++) {
+				if (!titleMap.containsKey(agesInDays[i])) {
 					String title = "Age of the line: " 
-							+ agesInMillis[i] + " millis ("
-							+ agesInDuration[i].toDays()
-							+ " days)";
-					titleMap.put(agesInMillis[i], title);
+							+ agesInDays[i] + " days";
+					titleMap.put(agesInDays[i], title);
 				}
 			}
 		});

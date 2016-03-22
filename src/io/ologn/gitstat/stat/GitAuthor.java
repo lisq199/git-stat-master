@@ -90,7 +90,7 @@ public class GitAuthor {
 	}
 	
 	public String toStringBasic() {
-		return "Name: " + name + ", Email: " + email;
+		return "Author: " + name + ", " + email;
 	}
 
 }
