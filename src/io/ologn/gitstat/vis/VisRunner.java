@@ -92,7 +92,8 @@ public class VisRunner {
 	 */
 	public void type2(String filePath, boolean sortByAge,
 			boolean sortByAgeAscending,
-			int pixelHeight, int pixelWidth, boolean displayVertical) {
+			int pixelHeight, int pixelWidth,
+			boolean displayYear, boolean displayVertical) {
 		try (
 			Git git = Git.open(new File(dotGitPath));
 			Repository repo = git.getRepository();
@@ -108,6 +109,7 @@ public class VisRunner {
 					faoc.getColorPixelsTitleMap();
 			List<String> colorPixelsDatasetDescriptions = 
 					faoc.getColorPixelsDatasetDescriptions(repo);
+			Map<Integer, String> colorPixelsBookmarkMap = null;
 			if (sortByAge) {
 				colorPixelsDataArrays = faoc
 						.getColorPixelsDataArraysSortedByAge(
@@ -115,6 +117,10 @@ public class VisRunner {
 			} else {
 				colorPixelsDataArrays = faoc.getColorPixelsDataArrays();
 			}
+			if (displayYear) {
+				colorPixelsBookmarkMap = faoc.getColorPixelsBookmarkMap(repo);
+			}
+			
 			String htmlString = ColorPixels.init()
 					.setPixelHeight(pixelHeight)
 					.setPixelWidth(pixelWidth)
@@ -122,7 +128,8 @@ public class VisRunner {
 							.reverse())
 					.parse(colorPixelsDataArrays, colorPixelsTitleMap,
 							colorPixelsDatasetDescriptions,
-							displayVertical)
+							colorPixelsBookmarkMap,
+							displayVertical, true)
 					.createHtmlString();
 			BrowserLauncher.launchWithHtmlText(htmlString);
 		} catch (IOException e) {
@@ -146,7 +153,8 @@ public class VisRunner {
 	 */
 	public void type3(String filePath, boolean sortByAuthor,
 			boolean sortByAuthorContribution,
-			int pixelHeight, int pixelWidth, boolean displayVertical) {
+			int pixelHeight, int pixelWidth, boolean displayYear,
+			boolean displayVertical) {
 		try (
 			Git git = Git.open(new File(dotGitPath));
 			Repository repo = git.getRepository();
@@ -162,6 +170,7 @@ public class VisRunner {
 					laoc.getColorPixelsTitleMap();
 			List<String> colorPixelsDatasetDescriptions =
 					laoc.getColorPixelsDatasetDescriptions(repo);
+			Map<Integer, String> colorPixelsBookmarkMap = null;
 			if (sortByAuthor) {
 				if (sortByAuthorContribution) {
 					colorPixelsDataArrays = laoc
@@ -174,6 +183,9 @@ public class VisRunner {
 			} else {
 				colorPixelsDataArrays = laoc.getColorPixelsDataArrays();
 			}
+			if (displayYear) {
+				colorPixelsBookmarkMap = laoc.getColorPixelsBookmarkMap(repo);
+			}
 			
 			String htmlString = ColorPixels.init()
 					.setPixelHeight(pixelHeight)
@@ -181,7 +193,8 @@ public class VisRunner {
 					.setColorCategory(ColorCategory.D3_CATEGORY20)
 					.parse(colorPixelsDataArrays, colorPixelsTitleMap,
 							colorPixelsDatasetDescriptions,
-							displayVertical)
+							colorPixelsBookmarkMap,
+							displayVertical, false)
 					.createHtmlString();
 			BrowserLauncher.launchWithHtmlText(htmlString);
 		} catch (IOException e) {

@@ -17,6 +17,7 @@ import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.Repository;
 
 import io.ologn.gitstat.jgit.MiscJGitUtils;
+import io.ologn.gitstat.utils.MyUtils;
 import io.ologn.gitstat.vis.ColorPixels;
 
 /**
@@ -193,6 +194,24 @@ public class LineAuthorshipOverCommits {
 			result.add(builder.toString());
 		}
 		return result;
+	}
+	
+	public Map<Integer, String> getColorPixelsBookmarkMap(
+			Repository repo) throws MissingObjectException,
+	IncorrectObjectTypeException, IOException {
+		Map<Integer, String> bookmarkMap = new HashMap<Integer, String>();
+		
+		int i = 0;
+		Date currentDate, previousDate = null;
+		for (String sha1 : map.keySet()) {
+			currentDate = MiscJGitUtils.getAuthorTimeFromSha1(repo, sha1);
+			if (!MyUtils.areInSameYear(currentDate, previousDate)) {
+				bookmarkMap.put(i, "" + MyUtils.getYearFromDate(currentDate));
+			}
+			previousDate = currentDate;
+			i++;
+		}
+		return bookmarkMap;
 	}
 	
 	protected void initAuthorIdMap() {

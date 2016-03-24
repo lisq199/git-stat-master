@@ -20,7 +20,7 @@
 	// over commits. 
 	// Type 3: Color pixels showing the authorship of each line 
 	// of code over commits. 
-	"visType": 3,
+	"visType": 2,
 
 	// (String)
 	// Needed in Type: 1, 2, 3. 
@@ -78,12 +78,12 @@
 
 	// (Integer) 
 	// Needed in Type: 2, 3. 
-	// The height of each color block
+	// The height of each color block if displayed vertically. 
 	"pixelHeight": 1,
 
 	// (Integer)
 	// Needed in Type: 2, 3. 
-	// The width of each color block
+	// The width of each color block if displayed vertically. 
 	"pixelWidth": 10,
 
 	// (Boolean)
@@ -91,7 +91,13 @@
 	// If set to true, the color blocks will be layed out 
 	// vertically, meaning each column will represent a commit. 
 	// Otherwise, the order will be horizontal, and a commit will 
-	// be represented by a row.
+	// be represented by a row. 
 	"displayVertical": false,
+
+	// (Boolean) 
+	// Needed in Type: 2, 3. 
+	// If set to true, additional bookmarks of years will be 
+	// displayed between the datasets. 
+	"displayYear": true,
 
 }

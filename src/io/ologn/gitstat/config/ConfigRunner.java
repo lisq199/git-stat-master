@@ -106,6 +106,7 @@ public class ConfigRunner {
 		int pixelHeight;
 		int pixelWidth;
 		boolean displayVertical;
+		boolean displayYear;
 		
 		switch (visType) {
 		case 1:
@@ -128,8 +129,9 @@ public class ConfigRunner {
 			pixelWidth = ConfigReader.getInt(config, "pixelWidth");
 			displayVertical = ConfigReader.getBoolean(config,
 					"displayVertical");
+			displayYear = ConfigReader.getBoolean(config, "displayYear");
 			visRunner.type2(filePath, sortByAge, sortByAgeAscending,
-					pixelHeight, pixelWidth, displayVertical);
+					pixelHeight, pixelWidth, displayYear, displayVertical);
 			break;
 		case 3:
 			filePath = ConfigReader.getString(config, "filePath");
@@ -140,8 +142,9 @@ public class ConfigRunner {
 			pixelWidth = ConfigReader.getInt(config, "pixelWidth");
 			displayVertical = ConfigReader.getBoolean(config,
 					"displayVertical");
+			displayYear = ConfigReader.getBoolean(config, "displayYear");
 			visRunner.type3(filePath, sortByAuthor, sortByAuthorContribution,
-					pixelHeight, pixelWidth, displayVertical);
+					pixelHeight, pixelWidth, displayYear, displayVertical);
 			break;
 		default:
 			err("Invalid property: visType.");

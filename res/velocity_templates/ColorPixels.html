@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
+	<meta charset='UTF-8'>
 	<style>
 		html, body {
 			margin: 0;
@@ -11,17 +11,20 @@
 	</style>
 </head>
 <body>
-	<svg id="graph" class="graph">
+	<svg id='graph' class='graph'>
 $svgTags
 	</svg>
-	<svg id="legend" class="legend">
+	<svg id='legend' class='legend'>
 $legendTags
 	</svg>
 	<script>
-		document.getElementById('graph').setAttribute("width", $totalWidth);
-		document.getElementById('graph').setAttribute("height", $totalHeight);
-		document.getElementById('legend').setAttribute("width", $totalWidth);
-		document.getElementById('legend').setAttribute("height", $legendHeight);
+		var windowWidth = window.innerWidth
+				|| document.documentElement.clientWidth
+				|| document.body.clientWidth;
+		document.getElementById('graph').setAttribute('width', $totalWidth);
+		document.getElementById('graph').setAttribute('height', $totalHeight);
+		document.getElementById('legend').setAttribute('width', Math.max(windowWidth, $totalWidth));
+		document.getElementById('legend').setAttribute('height', $legendHeight);
 	</script>
 </body>
 </html>
