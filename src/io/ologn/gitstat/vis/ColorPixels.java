@@ -124,6 +124,7 @@ public class ColorPixels implements VelocityHtmlGenerator {
 	 * @param titleMap A map that maps the data to its title/label
 	 * @param datasetDescription A list of Strings where each String 
 	 * is a description of the corresponding dataset
+	 * @param bookmarkMap
 	 * @param vertical
 	 * @param scaleColors
 	 * @return
