@@ -93,7 +93,8 @@ public class VisRunner {
 	public void type2(String filePath, boolean sortByAge,
 			boolean sortByAgeAscending,
 			int pixelHeight, int pixelWidth,
-			boolean displayYear, boolean displayVertical) {
+			boolean displayYear, boolean displayLegend,
+			boolean displayVertical) {
 		try (
 			Git git = Git.open(new File(dotGitPath));
 			Repository repo = git.getRepository();
@@ -128,7 +129,7 @@ public class VisRunner {
 							.reverse())
 					.parse(colorPixelsDataArrays, colorPixelsTitleMap,
 							colorPixelsDatasetDescriptions,
-							colorPixelsBookmarkMap,
+							colorPixelsBookmarkMap, displayLegend,
 							displayVertical, true)
 					.createHtmlString();
 			BrowserLauncher.launchWithHtmlText(htmlString);
@@ -153,7 +154,8 @@ public class VisRunner {
 	 */
 	public void type3(String filePath, boolean sortByAuthor,
 			boolean sortByAuthorContribution,
-			int pixelHeight, int pixelWidth, boolean displayYear,
+			int pixelHeight, int pixelWidth,
+			boolean displayYear, boolean displayLegend,
 			boolean displayVertical) {
 		try (
 			Git git = Git.open(new File(dotGitPath));
@@ -193,7 +195,7 @@ public class VisRunner {
 					.setColorCategory(ColorCategory.D3_CATEGORY20)
 					.parse(colorPixelsDataArrays, colorPixelsTitleMap,
 							colorPixelsDatasetDescriptions,
-							colorPixelsBookmarkMap,
+							colorPixelsBookmarkMap, displayLegend,
 							displayVertical, false)
 					.createHtmlString();
 			BrowserLauncher.launchWithHtmlText(htmlString);

@@ -43,6 +43,7 @@ public class ColorPixels implements VelocityHtmlGenerator {
 	protected int pixelWidth;
 	protected int pixelHeight;
 	protected ColorCategory colorCategory;
+	protected boolean displayLegend;
 	protected boolean vertical;
 	protected boolean scaleColors;
 	
@@ -131,8 +132,9 @@ public class ColorPixels implements VelocityHtmlGenerator {
 	 */
 	public ColorPixels parse(List<long[]> dataArrays,
 			Map<Long, String> titleMap, List<String> datasetDescriptions,
-			Map<Integer, String> bookmarkMap,
+			Map<Integer, String> bookmarkMap, boolean displayLegend,
 			boolean vertical, boolean scaleColors) {
+		this.displayLegend = displayLegend;
 		this.vertical = vertical;
 		this.scaleColors = scaleColors;
 		
@@ -266,6 +268,9 @@ public class ColorPixels implements VelocityHtmlGenerator {
 
 	protected String getLegendTags(List<long[]> dataArrays,
 			Map<Long, String> titleMap) {
+		if (!displayLegend) {
+			return "";
+		}
 		final String tt = "\t\t";
 		LinearScale colorScale = getColorScale(dataArrays, colorCategory);
 		StringBuilder builder = new StringBuilder();
