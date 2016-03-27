@@ -337,12 +337,11 @@ public class ColorPixels implements VelocityHtmlGenerator {
 	protected static String getRectTag(int x, int y, int width, int height,
 			String style, String title) {
 		String result = "<rect x='" + x + "' y='" + y + "' width='" + width
-				+ "' height='" + height + "' style='" + style + "'";
-		if (title == null || title.isEmpty()) {
-			result += " />";
-		} else {
-			result += "><title>" + title + "</title></rect>";
+				+ "' height='" + height + "' style='" + style + "'>";
+		if (title != null && !title.isEmpty()) {
+			result += "<title>" + title + "</title>";
 		}
+		result += "</rect>";
 		return result;
 	}
 	
