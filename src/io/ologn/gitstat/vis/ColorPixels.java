@@ -169,8 +169,11 @@ public class ColorPixels implements VelocityHtmlGenerator {
 		
 		String legendTags = getLegendTags(dataArrays, titleMap);
 		this.replaceMap.put(REPLACE_LEGEND, legendTags);
-		
-		int legendHeight = (LEGEND_SIZE + LEGEND_SPACE) * titleMap.size();
+		// Set legend height
+		int legendHeight = 0;
+		if (displayLegend) {
+			legendHeight = (LEGEND_SIZE + LEGEND_SPACE) * titleMap.size();
+		}
 		this.replaceMap.put(REPLACE_LEGEND_HEIGHT, "" + legendHeight);
 		
 		return this;
