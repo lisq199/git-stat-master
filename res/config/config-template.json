@@ -88,9 +88,16 @@
 
 	// (Boolean) 
 	// Needed in Type: 2, 3. 
-	// If set to true, additional bookmarks of years will be 
+	// If set to true, additional bookmarks will be 
 	// displayed between the datasets. 
-	"displayYear": true,
+	"displayBookmarks": true,
+
+	// (String) 
+	// Needed in Type: 2, 3. 
+	// The type of bookmarks to be displayed. If displayBookmarks 
+	// is set to false, this value will be ignored. 
+	// Possible values: "year", "commitId". 
+	"bookmarkType": "year",
 
 	// (Boolean) 
 	// Needed in Type: 2, 3.

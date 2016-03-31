@@ -196,7 +196,7 @@ public class LineAuthorshipOverCommits {
 		return result;
 	}
 	
-	public Map<Integer, String> getColorPixelsBookmarkMap(
+	public Map<Integer, String> getColorPixelsBookmarkMapByYear(
 			Repository repo) throws MissingObjectException,
 	IncorrectObjectTypeException, IOException {
 		Map<Integer, String> bookmarkMap = new HashMap<Integer, String>();
@@ -209,6 +209,17 @@ public class LineAuthorshipOverCommits {
 				bookmarkMap.put(i, "" + MyUtils.getYearFromDate(currentDate));
 			}
 			previousDate = currentDate;
+			i++;
+		}
+		return bookmarkMap;
+	}
+	
+	public Map<Integer, String> getColorPixelsBookmarkMapBySha1() {
+		Map<Integer, String> bookmarkMap = new HashMap<Integer, String>();
+		
+		int i = 0;
+		for (String sha1 : map.keySet()) {
+			bookmarkMap.put(i, sha1);
 			i++;
 		}
 		return bookmarkMap;

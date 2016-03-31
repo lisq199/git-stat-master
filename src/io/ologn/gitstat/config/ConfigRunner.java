@@ -106,7 +106,8 @@ public class ConfigRunner {
 		int pixelHeight;
 		int pixelWidth;
 		boolean displayLegend;
-		boolean displayYear;
+		boolean displayBookmarks;
+		String bookmarkType;
 		boolean displayVertical;
 		
 		switch (visType) {
@@ -128,13 +129,15 @@ public class ConfigRunner {
 					"sortByAgeAscending");
 			pixelHeight = ConfigReader.getInt(config, "pixelHeight");
 			pixelWidth = ConfigReader.getInt(config, "pixelWidth");
-			displayYear = ConfigReader.getBoolean(config, "displayYear");
+			displayBookmarks = ConfigReader.getBoolean(config,
+					"displayBookmarks");
+			bookmarkType = ConfigReader.getString(config, "bookmarkType");
 			displayLegend = ConfigReader.getBoolean(config, "displayLegend");
 			displayVertical = ConfigReader.getBoolean(config,
 					"displayVertical");
 			visRunner.type2(filePath, sortByAge, sortByAgeAscending,
-					pixelHeight, pixelWidth, displayYear, displayLegend,
-					displayVertical);
+					pixelHeight, pixelWidth, displayBookmarks, bookmarkType,
+					displayLegend, displayVertical);
 			break;
 		case 3:
 			filePath = ConfigReader.getString(config, "filePath");
@@ -144,12 +147,14 @@ public class ConfigRunner {
 			pixelHeight = ConfigReader.getInt(config, "pixelHeight");
 			pixelWidth = ConfigReader.getInt(config, "pixelWidth");
 			displayLegend = ConfigReader.getBoolean(config, "displayLegend");
-			displayYear = ConfigReader.getBoolean(config, "displayYear");
+			displayBookmarks = ConfigReader.getBoolean(config,
+					"displayBookmarks");
+			bookmarkType = ConfigReader.getString(config, "bookmarkType");
 			displayVertical = ConfigReader.getBoolean(config,
 					"displayVertical");
 			visRunner.type3(filePath, sortByAuthor, sortByAuthorContribution,
-					pixelHeight, pixelWidth, displayYear, displayLegend,
-					displayVertical);
+					pixelHeight, pixelWidth, displayBookmarks, bookmarkType,
+					displayLegend, displayVertical);
 			break;
 		default:
 			err("Invalid property: visType.");
