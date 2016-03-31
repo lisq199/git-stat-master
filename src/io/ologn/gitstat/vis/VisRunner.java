@@ -122,7 +122,7 @@ public class VisRunner {
 				if (bookmarkType.equalsIgnoreCase("year")) {
 					colorPixelsBookmarkMap = faoc
 							.getColorPixelsBookmarkMapByYear(repo);
-				} else if (bookmarkType.equalsIgnoreCase("commitId")) {
+				} else if (bookmarkType.equalsIgnoreCase("sha1")) {
 					colorPixelsBookmarkMap = faoc
 							.getColorPixelsBookmarkMapBySha1();
 				}
@@ -195,7 +195,7 @@ public class VisRunner {
 				if (bookmarkType.equalsIgnoreCase("year")) {
 					colorPixelsBookmarkMap = laoc
 							.getColorPixelsBookmarkMapByYear(repo);
-				} else if (bookmarkType.equalsIgnoreCase("commitId")) {
+				} else if (bookmarkType.equalsIgnoreCase("sha1")) {
 					colorPixelsBookmarkMap = laoc
 							.getColorPixelsBookmarkMapBySha1();
 				}

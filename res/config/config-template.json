@@ -96,7 +96,7 @@
 	// Needed in Type: 2, 3. 
 	// The type of bookmarks to be displayed. If displayBookmarks 
 	// is set to false, this value will be ignored. 
-	// Possible values: "year", "commitId". 
+	// Possible values: "year", "sha1". 
 	"bookmarkType": "year",
 
 	// (Boolean) 
