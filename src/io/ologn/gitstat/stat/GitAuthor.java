@@ -79,7 +79,7 @@ public class GitAuthor {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		return OlognHashCode.defaultEquals(this, o,
+		return OlognHashCode.equals(this, o,
 				(a, b) -> a.getName().compareTo(b.getName()) == 0
 				&& a.getEmail().compareTo(b.getEmail()) == 0);
 	}
