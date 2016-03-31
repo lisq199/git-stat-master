@@ -57,7 +57,7 @@ public class ChartJsPie implements VelocityHtmlGenerator {
 			builder.append(t).append("{\n");
 			builder.append(tt).append("value: ").append(v).append(",\n");
 			builder.append(tt).append("color: '")
-					.append(ColorCategory.D3_CATEGORY10.getColor(i))
+					.append(ColorCategory.D3_CATEGORY20.getColor(i))
 					.append("',\n");
 			builder.append(tt).append("label: ").append("'").append(k)
 					.append("'").append("\n");
