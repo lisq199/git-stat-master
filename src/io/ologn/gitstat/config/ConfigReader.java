@@ -80,8 +80,8 @@ public class ConfigReader {
 
 	static String getString(JSONObject config, Object key) {
 		String s = (String) config.get(key);
-		if (s == null || s.isEmpty()) {
-			err("Property " + key + " not found or is empty.");
+		if (s == null) {
+			err("Property " + key + " not found.");
 		}
 		return s;
 	}

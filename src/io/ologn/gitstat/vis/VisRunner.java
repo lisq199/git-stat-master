@@ -93,7 +93,7 @@ public class VisRunner {
 	public void type2(String filePath, boolean sortByAge,
 			boolean sortByAgeAscending,
 			int pixelHeight, int pixelWidth,
-			boolean displayBookmarks, String bookmarkType,
+			String bookmarkType,
 			boolean displayLegend, boolean displayVertical) {
 		try (
 			Git git = Git.open(new File(dotGitPath));
@@ -118,14 +118,12 @@ public class VisRunner {
 			} else {
 				colorPixelsDataArrays = faoc.getColorPixelsDataArrays();
 			}
-			if (displayBookmarks) {
-				if (bookmarkType.equalsIgnoreCase("year")) {
-					colorPixelsBookmarkMap = faoc
-							.getColorPixelsBookmarkMapByYear(repo);
-				} else if (bookmarkType.equalsIgnoreCase("sha1")) {
-					colorPixelsBookmarkMap = faoc
-							.getColorPixelsBookmarkMapBySha1();
-				}
+			if (bookmarkType.equalsIgnoreCase("year")) {
+				colorPixelsBookmarkMap = faoc
+						.getColorPixelsBookmarkMapByYear(repo);
+			} else if (bookmarkType.equalsIgnoreCase("sha1")) {
+				colorPixelsBookmarkMap = faoc
+						.getColorPixelsBookmarkMapBySha1();
 			}
 			
 			String htmlString = ColorPixels.init()
@@ -161,7 +159,7 @@ public class VisRunner {
 	public void type3(String filePath, boolean sortByAuthor,
 			boolean sortByAuthorContribution,
 			int pixelHeight, int pixelWidth,
-			boolean displayBookmarks, String bookmarkType,
+			String bookmarkType,
 			boolean displayLegend, boolean displayVertical) {
 		try (
 			Git git = Git.open(new File(dotGitPath));
@@ -191,14 +189,12 @@ public class VisRunner {
 			} else {
 				colorPixelsDataArrays = laoc.getColorPixelsDataArrays();
 			}
-			if (displayBookmarks) {
-				if (bookmarkType.equalsIgnoreCase("year")) {
-					colorPixelsBookmarkMap = laoc
-							.getColorPixelsBookmarkMapByYear(repo);
-				} else if (bookmarkType.equalsIgnoreCase("sha1")) {
-					colorPixelsBookmarkMap = laoc
-							.getColorPixelsBookmarkMapBySha1();
-				}
+			if (bookmarkType.equalsIgnoreCase("year")) {
+				colorPixelsBookmarkMap = laoc
+						.getColorPixelsBookmarkMapByYear(repo);
+			} else if (bookmarkType.equalsIgnoreCase("sha1")) {
+				colorPixelsBookmarkMap = laoc
+						.getColorPixelsBookmarkMapBySha1();
 			}
 			
 			String htmlString = ColorPixels.init()

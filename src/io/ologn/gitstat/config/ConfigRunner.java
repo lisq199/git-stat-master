@@ -106,7 +106,6 @@ public class ConfigRunner {
 		int pixelHeight;
 		int pixelWidth;
 		boolean displayLegend;
-		boolean displayBookmarks;
 		String bookmarkType;
 		boolean displayVertical;
 		
@@ -129,14 +128,12 @@ public class ConfigRunner {
 					"sortByAgeAscending");
 			pixelHeight = ConfigReader.getInt(config, "pixelHeight");
 			pixelWidth = ConfigReader.getInt(config, "pixelWidth");
-			displayBookmarks = ConfigReader.getBoolean(config,
-					"displayBookmarks");
 			bookmarkType = ConfigReader.getString(config, "bookmarkType");
 			displayLegend = ConfigReader.getBoolean(config, "displayLegend");
 			displayVertical = ConfigReader.getBoolean(config,
 					"displayVertical");
 			visRunner.type2(filePath, sortByAge, sortByAgeAscending,
-					pixelHeight, pixelWidth, displayBookmarks, bookmarkType,
+					pixelHeight, pixelWidth, bookmarkType,
 					displayLegend, displayVertical);
 			break;
 		case 3:
@@ -147,13 +144,11 @@ public class ConfigRunner {
 			pixelHeight = ConfigReader.getInt(config, "pixelHeight");
 			pixelWidth = ConfigReader.getInt(config, "pixelWidth");
 			displayLegend = ConfigReader.getBoolean(config, "displayLegend");
-			displayBookmarks = ConfigReader.getBoolean(config,
-					"displayBookmarks");
 			bookmarkType = ConfigReader.getString(config, "bookmarkType");
 			displayVertical = ConfigReader.getBoolean(config,
 					"displayVertical");
 			visRunner.type3(filePath, sortByAuthor, sortByAuthorContribution,
-					pixelHeight, pixelWidth, displayBookmarks, bookmarkType,
+					pixelHeight, pixelWidth, bookmarkType,
 					displayLegend, displayVertical);
 			break;
 		default:

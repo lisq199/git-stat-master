@@ -86,16 +86,10 @@
 	// The width of each color block if displayed vertically. 
 	"pixelWidth": 10,
 
-	// (Boolean) 
-	// Needed in Type: 2, 3. 
-	// If set to true, additional bookmarks will be 
-	// displayed between the datasets. 
-	"displayBookmarks": true,
-
 	// (String) 
 	// Needed in Type: 2, 3. 
-	// The type of bookmarks to be displayed. If displayBookmarks 
-	// is set to false, this value will be ignored. 
+	// The type of bookmarks to be displayed. Set it to an empty 
+	// string to hide bookmarks. 
 	// Possible values: "year", "sha1". 
 	"bookmarkType": "year",
 
