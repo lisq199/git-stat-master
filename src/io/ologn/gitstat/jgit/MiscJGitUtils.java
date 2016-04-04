@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -144,8 +143,7 @@ public class MiscJGitUtils {
 		List<Ref> tagList = git.tagList().call();
 		return tagList.stream()
 				.map(t -> t.getName())
-				.collect(Collectors.toList())
-				.toArray(new String[0]);
+				.toArray(String[]::new);
 	}
 
 }
