@@ -256,6 +256,7 @@ public class LineAuthorship implements BlameResultContainer {
 		List<LineAuthorship> list = new ArrayList<LineAuthorship>();
 		for (RevCommit commit : commits) {
 			list.add(calculate(git, repo, commit, filePath));
+			System.out.println("Processed: " + commit);
 		}
 		return list;
 	}

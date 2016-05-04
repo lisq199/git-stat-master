@@ -297,6 +297,7 @@ public class FileAge implements BlameResultContainer {
 		List<FileAge> list = new ArrayList<FileAge>();
 		for (RevCommit commit : commits) {
 			list.add(calculate(git, repo, commit, filePath));
+			System.out.println("Processed: " + commit);
 		}
 		return list;
 	}

@@ -46,12 +46,12 @@ public interface BlameResultContainer {
 	}
 	
 	/**
-	 * Get the GitAuthor representing the commiter at a line. Note: the 
+	 * Get the GitAuthor representing the committer at a line. Note: the 
 	 * author time in this case may not be meaningful.
 	 * @param i
 	 * @return
 	 */
-	public default GitAuthor getCommiterAtLine(int i) {
+	public default GitAuthor getCommitterAtLine(int i) {
 		return new GitAuthor(getBlameResult().getSourceCommitter(i));
 	}
 	
