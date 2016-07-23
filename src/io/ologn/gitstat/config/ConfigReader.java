@@ -50,7 +50,7 @@ public class ConfigReader {
 		return config;
 	}
 	
-	static boolean getBoolean(JSONObject config, Object key) {
+	public static boolean getBoolean(JSONObject config, Object key) {
 		Boolean b = (Boolean) config.get(key);
 		if (b == null) {
 			err("Property + " + key + " not found.");
@@ -58,7 +58,7 @@ public class ConfigReader {
 		return b;
 	}
 	
-	static long getLong(JSONObject config, Object key) {
+	public static long getLong(JSONObject config, Object key) {
 		Long l = (Long) config.get(key);
 		if (l == null) {
 			err("Property " + key + " not found.");
@@ -66,11 +66,11 @@ public class ConfigReader {
 		return l;
 	}
 	
-	static int getInt(JSONObject config, Object key) {
+	public static int getInt(JSONObject config, Object key) {
 		return (int) getLong(config, key);
 	}
 
-	static double getDouble(JSONObject config, Object key) {
+	public static double getDouble(JSONObject config, Object key) {
 		Double d = (Double) config.get(key);
 		if (d == null) {
 			err("Property " + key + " not found.");
@@ -78,7 +78,7 @@ public class ConfigReader {
 		return d;
 	}
 
-	static String getString(JSONObject config, Object key) {
+	public static String getString(JSONObject config, Object key) {
 		String s = (String) config.get(key);
 		if (s == null) {
 			err("Property " + key + " not found.");

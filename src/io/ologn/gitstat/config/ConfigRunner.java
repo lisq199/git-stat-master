@@ -57,7 +57,7 @@ public class ConfigRunner {
 		try (
 			Scanner stdin = new Scanner(System.in);
 		) {
-			Path configPath = getConfigPath(stdin);
+			Path configPath = Paths.get(DEFAULT_CONFIG_PATH);//getConfigPath(stdin);
 			config = ConfigReader.read(configPath);
 		} catch (IOException e) {
 			e.printStackTrace();
