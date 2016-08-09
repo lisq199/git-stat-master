@@ -17,7 +17,7 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import io.ologn.common.collect.OlognArrays;
-import io.ologn.common.type.OlognDurations;
+import io.ologn.common.time.OlognDurations;
 import io.ologn.gitstat.jgit.BlameUtils;
 
 /**
