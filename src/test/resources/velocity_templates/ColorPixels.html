@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ColorPixels</title>
+	<meta charset='UTF-8'>
+	<style>
+		html, body {
+			margin: 0;
+			/*height: 100%;
+			width: 100%;*/
+		}
+	</style>
+</head>
+<body>
+	<svg id='graph' class='graph'>
+$svgTags
+	</svg>
+	<svg id='legend' class='legend'>
+$legendTags
+	</svg>
+	<script>
+		var windowWidth = window.innerWidth
+				|| document.documentElement.clientWidth
+				|| document.body.clientWidth;
+		document.getElementById('graph').setAttribute('width', $totalWidth);
+		document.getElementById('graph').setAttribute('height', $totalHeight);
+		document.getElementById('legend').setAttribute('width', Math.max(windowWidth, $totalWidth));
+		document.getElementById('legend').setAttribute('height', $legendHeight);
+	</script>
+</body>
+</html>

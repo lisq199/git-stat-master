@@ -90,6 +90,8 @@
 	// Needed in Type: 2, 3. 
 	// The type of bookmarks to be displayed. Set it to an empty 
 	// string to hide bookmarks. 
+	// If the type of bookmark is not supported, no bookmarks 
+	// will be shown. 
 	// Possible values: "year", "sha1". 
 	"bookmarkType": "year",
 
